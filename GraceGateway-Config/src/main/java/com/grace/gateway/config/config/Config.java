@@ -1,6 +1,6 @@
 package com.grace.gateway.config.config;
 
-import com.grace.gateway.common.enums.RegisterCenter;
+import com.grace.gateway.common.enums.RegisterCenterEnum;
 import com.grace.gateway.config.pojo.RouteDefinition;
 import lombok.Data;
 
@@ -21,13 +21,10 @@ public class Config {
     private ConfigCenter configCenter = new ConfigCenter();
 
     // 注册中心
-    private RegisterCenter registerCenter = RegisterCenter.NACOS; // 注册中心实现
-    private String registerAddress = "127.0.0.1:8848"; // 注册中心地址
+    private RegisterCenter registerCenter = new RegisterCenter();
 
     //netty
-    private int eventLoopGroupBossNum = 1;
-    private int eventLoopGroupWorkerNum = Runtime.getRuntime().availableProcessors();
-    private int maxContentLength = 64 * 1024 * 1024; // 64MB
+    private NettyConfig netty = new NettyConfig();
 
     // 路由配置
     private List<RouteDefinition> routes = new ArrayList<>();
