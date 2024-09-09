@@ -12,6 +12,8 @@
 
     <artifactId>GraceGateway-Common</artifactId>
 
+    <description>存放通用信息</description>
+
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>

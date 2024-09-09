@@ -15,7 +15,7 @@
         <module>GraceGateway-Core</module>
         <module>GraceGateway-Common</module>
         <module>GraceGateway-Config</module>
-        <module>GraceGateway-Register-Center</module>
+        <module>GraceGateway-Register</module>
     </modules>
 
     <properties>
@@ -37,13 +37,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
-        </dependency>
-
-        <!--netty-->
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-            <version>${netty.version}</version>
         </dependency>
 
         <!--junit-->

@@ -5,17 +5,36 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>GraceGateway-Register-Center</artifactId>
+        <artifactId>GraceGateway</artifactId>
         <groupId>com.grace</groupId>
         <version>1.0</version>
     </parent>
 
-    <artifactId>GraceGateway-Register-Center-Api</artifactId>
+    <artifactId>GraceGateway-Register</artifactId>
+
+    <description>注册模块，注册服务与服务发现</description>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.grace</groupId>
+            <artifactId>GraceGateway-Common</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <!--nacos-->
+        <dependency>
+            <groupId>com.alibaba.nacos</groupId>
+            <artifactId>nacos-client</artifactId>
+            <version>${nacos.version}</version>
+        </dependency>
+
+    </dependencies>
 
 </project>

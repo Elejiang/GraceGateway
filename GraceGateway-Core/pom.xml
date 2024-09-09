@@ -12,6 +12,8 @@
 
     <artifactId>GraceGateway-Core</artifactId>
 
+    <description>核心模块</description>
+
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -34,8 +36,15 @@
 
         <dependency>
             <groupId>com.grace</groupId>
-            <artifactId>GraceGateway-Register-Center</artifactId>
+            <artifactId>GraceGateway-Register</artifactId>
             <version>1.0</version>
+        </dependency>
+
+        <!--netty-->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>${netty.version}</version>
         </dependency>
 
     </dependencies>

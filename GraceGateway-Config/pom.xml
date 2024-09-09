@@ -12,6 +12,8 @@
 
     <artifactId>GraceGateway-Config</artifactId>
 
+    <description>配置模块，加载网关配置</description>
+
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
