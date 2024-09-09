@@ -1,0 +1,5 @@
+grace:
+  gateway:
+    routes:
+      - id: 123
+        uri: aaa.com/**

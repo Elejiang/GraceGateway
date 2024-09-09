@@ -25,6 +25,7 @@
 
         <lombok.version>1.18.26</lombok.version>
         <netty.version>4.1.51.Final</netty.version>
+        <junit.version>4.12</junit.version>
     </properties>
 
     <dependencies>
@@ -41,6 +42,14 @@
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
             <version>${netty.version}</version>
+        </dependency>
+
+        <!--junit-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
