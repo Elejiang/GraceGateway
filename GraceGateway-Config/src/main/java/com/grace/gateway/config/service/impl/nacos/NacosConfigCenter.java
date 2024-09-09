@@ -8,11 +8,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grace.gateway.config.config.ConfigCenter;
 import com.grace.gateway.config.service.ConfigCenterProcessor;
 import com.grace.gateway.config.service.RoutesChangeListener;
+import com.grace.gateway.config.service.impl.nacos.config.NacosConfig;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+@Slf4j
 public class NacosConfigCenter implements ConfigCenterProcessor {
 
     /**
@@ -25,25 +29,44 @@ public class NacosConfigCenter implements ConfigCenterProcessor {
      */
     private ConfigService configService;
 
+    /**
+     * 是否完成初始化
+     */
+    private final AtomicBoolean init = new AtomicBoolean(false);
+
+    public NacosConfigCenter(ConfigCenter configCenter) {
+        this.configCenter = configCenter;
+        init(configCenter);
+    }
 
     @SneakyThrows(NacosException.class)
     @Override
     public void init(ConfigCenter configCenter) {
-        this.configCenter = configCenter;
-        Properties properties = buildProperties(configCenter);
-        this.configService = NacosFactory.createConfigService(properties);
+        if (!configCenter.isEnable() || !init.compareAndSet(false, true)) {
+            return;
+        }
+        this.configService = NacosFactory.createConfigService(buildProperties(configCenter));
     }
 
+    @SneakyThrows(NacosException.class)
     @Override
     public void subscribeRoutesChange(RoutesChangeListener listener) {
+        if (!configCenter.isEnable()) {
+            return;
+        }
+        NacosConfig nacos = configCenter.getNacos();
+        String configJson = configService.getConfig(nacos.getDataId(), nacos.getGroup(), nacos.getTimeout());
+        log.info("config from nacos: {}", configJson);
 
     }
 
     private Properties buildProperties(ConfigCenter configCenter) {
-        Properties properties = new Properties();
-        properties.put(PropertyKeyConst.SERVER_ADDR, configCenter.getConfigAddress());
         ObjectMapper mapper = new ObjectMapper();
-        properties.putAll(mapper.convertValue(configCenter.getNacosConfig(), Map.class));
+        Properties properties = new Properties();
+        properties.put(PropertyKeyConst.SERVER_ADDR, configCenter.getAddress());
+        Map map = mapper.convertValue(configCenter.getNacos(), Map.class);
+        if (map == null || map.isEmpty()) return properties;
+        properties.putAll(map);
         return properties;
     }
 

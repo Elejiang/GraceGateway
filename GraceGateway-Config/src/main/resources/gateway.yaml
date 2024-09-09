@@ -1,8 +1,12 @@
 grace:
   gateway:
+    configCenter:
+      enable: true
+      type: NACOS
+      address: 127.0.0.1:8848
+      nacos:
+        namespace: 7a552eec-cda7-41d5-b020-f73e8d3b8609
+
     routes:
       - id: 123
         uri: aaa.com/**
-    configCenter:
-      nacosConfig:
-        namespace: aaa
