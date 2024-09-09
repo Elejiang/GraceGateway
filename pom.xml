@@ -11,11 +11,11 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>GraceGateway-Bootstrap</module>
         <module>GraceGateway-Core</module>
         <module>GraceGateway-Common</module>
         <module>GraceGateway-Config</module>
         <module>GraceGateway-Register-Center</module>
-        <module>GraceGateway-Bootstrap</module>
     </modules>
 
     <properties>
@@ -26,6 +26,8 @@
         <lombok.version>1.18.26</lombok.version>
         <netty.version>4.1.51.Final</netty.version>
         <junit.version>4.12</junit.version>
+        <jackson.version>2.17.2</jackson.version>
+        <nacos.version>2.0.4</nacos.version>
     </properties>
 
     <dependencies>

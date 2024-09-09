@@ -3,3 +3,6 @@ grace:
     routes:
       - id: 123
         uri: aaa.com/**
+    configCenter:
+      nacosConfig:
+        namespace: aaa
