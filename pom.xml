@@ -30,6 +30,7 @@
         <nacos.version>2.0.4</nacos.version>
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.1.7</logback.version>
+        <fastjson.verson>1.2.76</fastjson.verson>
     </properties>
 
     <dependencies>
