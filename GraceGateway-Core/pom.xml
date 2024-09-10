@@ -47,6 +47,19 @@
             <version>${netty.version}</version>
         </dependency>
 
+        <!--http-->
+        <dependency>
+            <groupId>org.asynchttpclient</groupId>
+            <artifactId>async-http-client</artifactId>
+            <version>${async-http-client.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.asynchttpclient</groupId>
+            <artifactId>async-http-client-netty-utils</artifactId>
+            <version>${async-http-client.version}</version>
+        </dependency>
+
     </dependencies>
 
 </project>
