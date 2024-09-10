@@ -8,6 +8,7 @@ import com.alibaba.nacos.api.config.listener.Listener;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grace.gateway.config.config.ConfigCenter;
+import com.grace.gateway.config.config.lib.nacos.NacosConfig;
 import com.grace.gateway.config.pojo.RouteDefinition;
 import com.grace.gateway.config.service.AbstractConfigCenterProcessor;
 import com.grace.gateway.config.service.RoutesChangeListener;
@@ -32,7 +33,7 @@ public class NacosConfigCenter extends AbstractConfigCenterProcessor {
     }
 
     @SneakyThrows(NacosException.class)
-    protected void initialize(ConfigCenter configCenter) {
+    protected void initialize() {
         this.configService = NacosFactory.createConfigService(buildProperties(configCenter));
     }
 

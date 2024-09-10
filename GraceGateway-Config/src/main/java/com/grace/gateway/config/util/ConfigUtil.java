@@ -20,7 +20,7 @@ public class ConfigUtil {
     public static <T> T loadConfigFromYaml(String filePath, Class<T> clazz, String prefix) {
         try (InputStream inputStream = ConfigLoader.class.getClassLoader().getResourceAsStream(filePath)) {
             if (inputStream == null) return null;
-            ObjectNode rootNode = (ObjectNode) mapper.readTree((inputStream));
+            ObjectNode rootNode = (ObjectNode) mapper.readTree(inputStream);
             ObjectNode subNode = getSubNode(rootNode, prefix);
             return mapper.treeToValue(subNode, clazz);
         } catch (IOException e) {

@@ -1,11 +1,12 @@
 package com.grace.gateway.config.config;
 
-import com.grace.gateway.common.enums.RegisterCenterEnum;
 import com.grace.gateway.config.pojo.RouteDefinition;
 import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.grace.gateway.common.constant.ConfigConstant.*;
 
 /**
  * 网关静态配置
@@ -14,8 +15,9 @@ import java.util.List;
 public class Config {
 
     // base
-    private int port = 9999;
-    private String env = "dev";
+    private String name = DEFAULT_NAME; // 服务名称
+    private int port = DEFAULT_PORT; // 端口
+    private String env = DEFAULT_ENV; // 环境
 
     // 配置中心
     private ConfigCenter configCenter = new ConfigCenter();

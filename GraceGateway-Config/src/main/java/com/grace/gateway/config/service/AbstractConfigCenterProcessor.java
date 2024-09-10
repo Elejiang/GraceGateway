@@ -18,26 +18,26 @@ public abstract class AbstractConfigCenterProcessor implements ConfigCenterProce
 
     public AbstractConfigCenterProcessor(ConfigCenter configCenter) {
         this.configCenter = configCenter;
-        init(configCenter);
+        init();
     }
 
     @Override
-    public void init(ConfigCenter configCenter) {
-        if (!configCenter.isEnable() || !init.compareAndSet(false, true)) {
+    public void init() {
+        if (!configCenter.isEnabled() || !init.compareAndSet(false, true)) {
             return;
         }
-        initialize(configCenter);
+        initialize();
     }
 
     @Override
     public void subscribeRoutesChange(RoutesChangeListener listener) {
-        if (!configCenter.isEnable()) {
+        if (!configCenter.isEnabled()) {
             return;
         }
         subscribeConfigChange(listener);
     }
 
-    protected abstract void initialize(ConfigCenter configCenter);
+    protected abstract void initialize();
 
     protected abstract void subscribeConfigChange(RoutesChangeListener listener);
 

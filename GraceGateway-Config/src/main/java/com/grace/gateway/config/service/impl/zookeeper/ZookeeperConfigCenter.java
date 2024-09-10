@@ -11,7 +11,7 @@ public class ZookeeperConfigCenter extends AbstractConfigCenterProcessor {
         super(configCenter);
     }
 
-    protected void initialize(ConfigCenter configCenter) {
+    protected void initialize() {
 
     }
 

@@ -6,14 +6,10 @@ public interface ConfigConstant {
 
     String CONFIG_PREFIX = "grace.gateway"; // 配置前缀
 
-    boolean CONFIG_CENTER_DEFAULT_ENABLE = false; // 是否开启配置中心，为了方便起项目，默认关闭
+    String DEFAULT_NAME = "grace-gateway"; // 服务默认名字
 
-    String CONFIG_NACOS_DEFAULT_NAMESPACE = ""; // 配置中心nacos实现的默认命名空间，为空，代表public
+    int DEFAULT_PORT = 9999; // 默认端口
 
-    String CONFIG_NACOS_DEFAULT_DATA_ID = "grace-gateway"; // 配置中心nacos实现的默认Data Id
-
-    String CONFIG_NACOS_DEFAULT_GROUP = "dev"; // 配置中心nacos实现的默认Group
-
-    int CONFIG_NACOS_DEFAULT_TIMEOUT = 5000;  // 配置中心nacos实现的默认超时时长
+    String DEFAULT_ENV = "dev"; // 默认环境
 
 }

@@ -24,7 +24,7 @@
 
         <dependency>
             <groupId>com.grace</groupId>
-            <artifactId>GraceGateway-Common</artifactId>
+            <artifactId>GraceGateway-Config</artifactId>
             <version>1.0</version>
         </dependency>
 

@@ -1,7 +1,10 @@
 package com.grace.gateway.config.config;
 
 import com.grace.gateway.common.enums.RegisterCenterEnum;
+import com.grace.gateway.config.config.lib.nacos.NacosConfig;
 import lombok.Data;
+
+import static com.grace.gateway.common.constant.RegisterCenterConstant.*;
 
 /**
  * 注册中心
@@ -9,8 +12,10 @@ import lombok.Data;
 @Data
 public class RegisterCenter {
 
-    private RegisterCenterEnum registerCenter = RegisterCenterEnum.NACOS; // 注册中心实现
+    private RegisterCenterEnum type = REGISTER_CENTER_DEFAULT_IMPL; // 注册中心实现
 
-    private String registerAddress = "127.0.0.1:8848"; // 注册中心地址
+    private String address = REGISTER_CENTER_DEFAULT_ADDRESS; // 注册中心地址
+
+    private NacosConfig nacos = new NacosConfig(); // 注册中心nacos配置
 
 }

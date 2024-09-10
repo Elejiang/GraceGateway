@@ -1,6 +1,7 @@
 grace:
   gateway:
-    name: gateway-1
+    port: 9999
+    name: grace-gateway
     configCenter:
       enable: true
       type: NACOS
@@ -8,7 +9,7 @@ grace:
       nacos:
         namespace: 7a552eec-cda7-41d5-b020-f73e8d3b8609
         group: GATEWAY_GROUP
-        dataId: grace-gateway
+        dataId: grace-gateway-data
     registerCenter:
       type: NACOS
       address: 127.0.0.1:8848

@@ -11,7 +11,7 @@ public interface ConfigCenterProcessor {
     /**
      * 初始化配置中心配置
      */
-    void init(ConfigCenter configCenter);
+    void init();
 
     /**
      * 订阅配置中心配置变更

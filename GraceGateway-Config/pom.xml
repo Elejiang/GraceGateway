@@ -28,25 +28,6 @@
             <version>1.0</version>
         </dependency>
 
-        <!--json解析-->
-        <dependency>
-            <groupId>com.fasterxml.jackson.dataformat</groupId>
-            <artifactId>jackson-dataformat-yaml</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>${fastjson.verson}</version>
-        </dependency>
-
         <!--nacos-->
         <dependency>
             <groupId>com.alibaba.nacos</groupId>
