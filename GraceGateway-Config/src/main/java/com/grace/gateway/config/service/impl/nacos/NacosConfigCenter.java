@@ -11,7 +11,6 @@ import com.grace.gateway.config.config.ConfigCenter;
 import com.grace.gateway.config.pojo.RouteDefinition;
 import com.grace.gateway.config.service.AbstractConfigCenterProcessor;
 import com.grace.gateway.config.service.RoutesChangeListener;
-import com.grace.gateway.config.service.impl.nacos.config.NacosConfig;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 

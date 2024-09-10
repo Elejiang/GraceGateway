@@ -1,7 +1,7 @@
 package com.grace.gateway.config.config;
 
 import com.grace.gateway.common.enums.ConfigCenterEnum;
-import com.grace.gateway.config.service.impl.nacos.config.NacosConfig;
+import com.grace.gateway.config.service.impl.nacos.NacosConfig;
 import lombok.Data;
 
 import static com.grace.gateway.common.constant.ConfigConstant.CONFIG_CENTER_DEFAULT_ENABLE;

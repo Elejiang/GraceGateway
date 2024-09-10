@@ -1,4 +1,4 @@
-package com.grace.gateway.config.service.impl.nacos.config;
+package com.grace.gateway.config.service.impl.nacos;
 
 import lombok.Data;
 
