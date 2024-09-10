@@ -13,6 +13,7 @@ import static com.grace.gateway.common.constant.ConfigConstant.CONFIG_PREFIX;
 public class ConfigLoader {
 
     public static Config load(String[] args) {
+        // TODO 多来源加载
         return ConfigUtil.loadConfigFromYaml(CONFIG_PATH, Config.class, CONFIG_PREFIX);
     }
 
