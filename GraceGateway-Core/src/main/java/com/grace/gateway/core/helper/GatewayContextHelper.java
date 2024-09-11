@@ -7,6 +7,7 @@ import com.grace.gateway.core.context.GatewayContext;
 import com.grace.gateway.core.request.GatewayRequest;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import static com.grace.gateway.common.constant.HttpConstant.HTTP_FORWARD_SEPARATOR;
 
+@Slf4j
 public class GatewayContextHelper {
 
     public static GatewayContext buildGatewayContext(FullHttpRequest request, ChannelHandlerContext ctx) {

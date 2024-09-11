@@ -17,5 +17,10 @@ grace:
         group: GATEWAY_GROUP
 
     routes:
-      - id: 123
-        uri: aaa.com/**
+      - id: userRoute
+        serviceName: user
+        uri: /api/user/**
+
+      - id: orderRoute
+        serviceName: order
+        uri: /api/order/**

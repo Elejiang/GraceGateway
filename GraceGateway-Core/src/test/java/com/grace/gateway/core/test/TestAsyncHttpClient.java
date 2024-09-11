@@ -2,7 +2,9 @@ package com.grace.gateway.core.test;
 
 import com.grace.gateway.config.config.Config;
 import com.grace.gateway.config.loader.ConfigLoader;
+import com.grace.gateway.config.manager.DynamicConfigManager;
 import com.grace.gateway.core.netty.NettyHttpServer;
+import com.grace.gateway.core.netty.processor.NettyCoreProcessor;
 import io.netty.buffer.PooledByteBufAllocator;
 import org.asynchttpclient.*;
 import org.junit.Before;
@@ -21,7 +23,7 @@ public class TestAsyncHttpClient {
     @Before
     public void before() {
         config = ConfigLoader.load(null);
-        nettyHttpServer = new NettyHttpServer(config, null);
+        nettyHttpServer = new NettyHttpServer(config, new NettyCoreProcessor());
         DefaultAsyncHttpClientConfig.Builder builder = new DefaultAsyncHttpClientConfig.Builder()
                 .setEventLoopGroup(nettyHttpServer.getEventLoopGroupWorker()) // 使用传入的Netty事件循环组
                 .setConnectTimeout(3000) // 连接超时设置
@@ -46,6 +48,13 @@ public class TestAsyncHttpClient {
         ListenableFuture<Response> execute = asyncHttpClient.prepareGet(url).execute();
         Response response1 = execute.get();
         System.out.println(response1.toString());
+    }
+
+    @Test
+    public void testNettyServer() {
+        nettyHttpServer.start();
+        DynamicConfigManager.getInstance().updateRoutes(config.getRoutes());
+        while(true) {}
     }
 
 }

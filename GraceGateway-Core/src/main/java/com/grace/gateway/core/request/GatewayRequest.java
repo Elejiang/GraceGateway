@@ -10,7 +10,11 @@ import org.asynchttpclient.Request;
 import org.asynchttpclient.RequestBuilder;
 
 import java.nio.charset.Charset;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import static com.grace.gateway.common.constant.BasicConstant.DATE_DEFAULT_FORMATTER;
 
 
 /**
@@ -18,6 +22,11 @@ import java.util.*;
  */
 @Data
 public class GatewayRequest {
+
+    /**
+     * 请求流水号
+     */
+    private final String id;
 
     /**
      * 服务名
@@ -115,6 +124,7 @@ public class GatewayRequest {
     private String modifyPath;
 
     public GatewayRequest(String serviceName, Charset charset, String clientIp, String host, String uri, HttpMethod method, String contentType, HttpHeaders headers, FullHttpRequest fullHttpRequest) {
+        this.id = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_DEFAULT_FORMATTER)) + "---" + UUID.randomUUID();
         this.serviceName = serviceName;
         this.beginTime = System.currentTimeMillis();
         this.charset = charset;
@@ -162,12 +172,7 @@ public class GatewayRequest {
     }
 
     public Request build() {
-        requestBuilder.setUrl(getFinalUrl());
-        return requestBuilder.build();
-    }
-
-    private String getFinalUrl() {
-        return modifyScheme + modifyHost + modifyPath;
+        return requestBuilder.setUrl(modifyScheme + modifyHost + modifyPath).build();
     }
 
 }
