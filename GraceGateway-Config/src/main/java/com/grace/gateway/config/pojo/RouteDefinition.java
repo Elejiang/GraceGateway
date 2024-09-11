@@ -15,8 +15,8 @@ public class RouteDefinition {
     // 服务名
     private String serviceName;
 
-    // 路由的URI
-    private URI uri;
+    // 路由的URI，/xxx/yyy/** 的格式
+    private String uri;
 
     // 路由顺序，当请求匹配到多个路由时，选择顺序小的
     private int order = 0;
