@@ -1,0 +1,13 @@
+server:
+  port: 10001
+
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        group: GATEWAY_GROUP
+        namespace: 7a552eec-cda7-41d5-b020-f73e8d3b8609
+
+  application:
+    name: http-server

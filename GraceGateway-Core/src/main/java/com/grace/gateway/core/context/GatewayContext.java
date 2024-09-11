@@ -25,4 +25,16 @@ public class GatewayContext {
 
     private RouteDefinition route;
 
+    private int currentRetryTimes;
+
+    private boolean keepAlive;
+
+    public GatewayContext(ChannelHandlerContext nettyCtx, GatewayRequest request,
+                          RouteDefinition route, boolean keepAlive) {
+        this.nettyCtx = nettyCtx;
+        this.request = request;
+        this.route = route;
+        this.keepAlive = keepAlive;
+    }
+
 }

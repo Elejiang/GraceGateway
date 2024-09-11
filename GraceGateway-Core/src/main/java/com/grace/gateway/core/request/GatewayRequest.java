@@ -100,17 +100,17 @@ public class GatewayRequest {
     private Map<String, List<String>> postParameters;
 
     /**
-     * 可修改的Scheme，默认是http://
+     * 发给下游的scheme，默认是http://
      */
     private String modifyScheme;
 
     /**
-     * 可修改的Host
+     * 发给下游的host
      */
     private String modifyHost;
 
     /**
-     * 可修改的path
+     * 发给下游的path
      */
     private String modifyPath;
 
@@ -125,6 +125,7 @@ public class GatewayRequest {
         this.contentType = contentType;
         this.headers = headers;
         this.fullHttpRequest = fullHttpRequest;
+
         this.queryStringDecoder = new QueryStringDecoder(uri, charset);
         this.path = queryStringDecoder.path();
         this.modifyHost = host;
@@ -160,13 +161,13 @@ public class GatewayRequest {
         return cookieMap.get(name);
     }
 
-    public String getFinalUrl() {
-        return modifyScheme + modifyHost + modifyPath;
-    }
-
     public Request build() {
         requestBuilder.setUrl(getFinalUrl());
         return requestBuilder.build();
+    }
+
+    private String getFinalUrl() {
+        return modifyScheme + modifyHost + modifyPath;
     }
 
 }

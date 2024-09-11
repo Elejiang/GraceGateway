@@ -31,7 +31,7 @@ public class DynamicConfigManager {
 
     private static final DynamicConfigManager INSTANCE = new DynamicConfigManager();
 
-    public DynamicConfigManager getInstance() {
+    public static DynamicConfigManager getInstance() {
         return INSTANCE;
     }
 

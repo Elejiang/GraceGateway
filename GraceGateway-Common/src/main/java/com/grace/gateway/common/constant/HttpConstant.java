@@ -10,4 +10,6 @@ public interface HttpConstant {
 
     String DATA = "data";
 
+    String HTTP_FORWARD_SEPARATOR = "X-Forwarded-For";
+
 }
