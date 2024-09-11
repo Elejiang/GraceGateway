@@ -45,9 +45,9 @@ public class TestAsyncHttpClient {
         builder.setMethod("GET");
         builder.setUrl(url);
         ListenableFuture<Response> future = asyncHttpClient.executeRequest(builder.build());
-        ListenableFuture<Response> execute = asyncHttpClient.prepareGet(url).execute();
-        Response response1 = execute.get();
-        System.out.println(response1.toString());
+        Response response = future.get();
+        int statusCode = response.getStatusCode();
+        System.out.println(statusCode);
     }
 
     @Test
