@@ -45,7 +45,7 @@ public class TestAsyncHttpClient {
         builder.setMethod("GET");
         builder.setUrl(url);
         ListenableFuture<Response> future = asyncHttpClient.executeRequest(builder.build());
-        Response response = future.get();
+        Response response = future.get(); // 阻塞
         int statusCode = response.getStatusCode();
         System.out.println(statusCode);
     }

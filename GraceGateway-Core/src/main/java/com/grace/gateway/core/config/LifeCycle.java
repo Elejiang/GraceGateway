@@ -12,4 +12,9 @@ public interface LifeCycle {
      */
     void shutdown();
 
+    /**
+     * 是否启动
+     */
+    boolean isStarted();
+
 }

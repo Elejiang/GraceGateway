@@ -1,5 +1,6 @@
 package com.grace.gateway.config.config;
 
+import com.grace.gateway.config.HttpClientConfig;
 import com.grace.gateway.config.pojo.RouteDefinition;
 import lombok.Data;
 
@@ -25,8 +26,11 @@ public class Config {
     // 注册中心
     private RegisterCenter registerCenter = new RegisterCenter();
 
-    //netty
+    // netty
     private NettyConfig netty = new NettyConfig();
+
+    // http client
+    private HttpClientConfig httpClient = new HttpClientConfig();
 
     // 路由配置
     private List<RouteDefinition> routes = new ArrayList<>();

@@ -1,9 +1,9 @@
 package com.grace.gateway.core.netty;
 
 
-import ch.qos.logback.core.spi.LifeCycle;
 import com.grace.gateway.common.util.SystemUtil;
 import com.grace.gateway.config.config.Config;
+import com.grace.gateway.core.config.LifeCycle;
 import com.grace.gateway.core.netty.handler.NettyHttpServerHandler;
 import com.grace.gateway.core.netty.processor.NettyProcessor;
 import io.netty.bootstrap.ServerBootstrap;
@@ -95,7 +95,7 @@ public class NettyHttpServer implements LifeCycle {
     }
 
     @Override
-    public void stop() {
+    public void shutdown() {
         if (!start.get()) return;
         if (eventLoopGroupBoss != null) {
             eventLoopGroupBoss.shutdownGracefully(); // 优雅关闭boss线程组
