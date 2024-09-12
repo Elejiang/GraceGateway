@@ -4,9 +4,10 @@ import com.grace.gateway.config.pojo.RouteDefinition;
 import com.grace.gateway.config.pojo.ServiceDefinition;
 import com.grace.gateway.config.pojo.ServiceInstance;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 /**
  * 动态配置管理，缓存从配置中心拉取下来的配置

@@ -2,7 +2,6 @@ package com.grace.gateway.config.pojo;
 
 import lombok.Data;
 
-import java.net.URI;
 import java.util.Set;
 import java.util.UUID;
 

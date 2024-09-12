@@ -35,12 +35,11 @@ public class NettyHttpServer implements LifeCycle {
 
     private final Config config;
     private final NettyProcessor nettyProcessor;
+    private final AtomicBoolean start = new AtomicBoolean(false);
     private ServerBootstrap serverBootstrap;
     private EventLoopGroup eventLoopGroupBoss;
     @Getter
     private EventLoopGroup eventLoopGroupWorker;
-
-    private final AtomicBoolean start = new AtomicBoolean(false);
 
     public NettyHttpServer(Config config, NettyProcessor nettyProcessor) {
         this.config = config;
@@ -115,4 +114,5 @@ public class NettyHttpServer implements LifeCycle {
     private boolean useEpoll() {
         return SystemUtil.isLinuxPlatform() && Epoll.isAvailable();
     }
+
 }

@@ -4,7 +4,8 @@ import com.grace.gateway.common.enums.RegisterCenterEnum;
 import com.grace.gateway.config.config.lib.nacos.NacosConfig;
 import lombok.Data;
 
-import static com.grace.gateway.common.constant.RegisterCenterConstant.*;
+import static com.grace.gateway.common.constant.RegisterCenterConstant.REGISTER_CENTER_DEFAULT_ADDRESS;
+import static com.grace.gateway.common.constant.RegisterCenterConstant.REGISTER_CENTER_DEFAULT_IMPL;
 
 /**
  * 注册中心

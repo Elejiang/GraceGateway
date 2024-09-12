@@ -1,7 +1,5 @@
 package com.grace.gateway.register.service;
 
-import com.grace.gateway.config.config.RegisterCenter;
-
 /**
  * 注册中心接口
  */

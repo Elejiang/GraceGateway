@@ -4,7 +4,6 @@ import com.grace.gateway.config.config.Config;
 import com.grace.gateway.config.helper.RouteResolver;
 import com.grace.gateway.config.loader.ConfigLoader;
 import com.grace.gateway.config.manager.DynamicConfigManager;
-import com.grace.gateway.config.pojo.RouteDefinition;
 import org.junit.Test;
 
 import java.util.HashMap;
