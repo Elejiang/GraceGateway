@@ -1,6 +1,5 @@
 package com.grace.gateway.core.filter.gray.strategy;
 
-import cn.hutool.json.JSONUtil;
 import com.grace.gateway.config.pojo.RouteDefinition;
 import com.grace.gateway.config.pojo.ServiceInstance;
 import com.grace.gateway.config.util.FilterUtil;
@@ -16,8 +15,7 @@ public class ClientIpGrayStrategy implements GrayStrategy {
     @Override
     public boolean shouldRoute2Gray(GatewayContext context, List<ServiceInstance> instances) {
         if (instances.stream().anyMatch(instance -> instance.isEnabled() && !instance.isGray())) {
-            RouteDefinition.FilterConfig filterConfig = FilterUtil.findFilterConfigByName(context.getRoute().getFilterConfigs(), GRAY_FILTER_NAME);
-            RouteDefinition.GrayFilterConfig grayFilterConfig = JSONUtil.toBean(filterConfig.getConfig(), RouteDefinition.GrayFilterConfig.class);
+            RouteDefinition.GrayFilterConfig grayFilterConfig = FilterUtil.findFilterConfigByClass(context.getRoute().getFilterConfigs(), GRAY_FILTER_NAME, RouteDefinition.GrayFilterConfig.class);
             double grayThreshold = instances.stream().mapToDouble(ServiceInstance::getThreshold).sum();
             grayThreshold = Math.min(grayThreshold, grayFilterConfig.getMaxGrayThreshold());
             return Math.abs(context.getRequest().getHost().hashCode()) % 100 <= grayThreshold * 100;

@@ -1,5 +1,6 @@
 package com.grace.gateway.config.util;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
 import com.grace.gateway.config.pojo.RouteDefinition;
 
@@ -19,6 +20,11 @@ public class FilterUtil {
             }
         }
         return null;
+    }
+
+    public static <T> T findFilterConfigByClass(Collection<RouteDefinition.FilterConfig> filterConfigs, String name, Class<T> clazz) {
+        RouteDefinition.FilterConfig filterConfig = findFilterConfigByName(filterConfigs, name);
+        return BeanUtil.toBean(filterConfig.getConfig(), clazz);
     }
 
     public static RouteDefinition.FilterConfig buildDefaultGrayFilterConfig() {

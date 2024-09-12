@@ -1,6 +1,5 @@
 package com.grace.gateway.core.filter.loadbalance.strategy;
 
-import cn.hutool.json.JSONUtil;
 import com.grace.gateway.config.pojo.RouteDefinition;
 import com.grace.gateway.config.pojo.ServiceInstance;
 import com.grace.gateway.config.util.FilterUtil;
@@ -25,9 +24,8 @@ public class RoundRobinLoadBalanceStrategy implements LoadBalanceStrategy {
     @Override
     public ServiceInstance selectInstance(GatewayContext context, List<ServiceInstance> instances) {
         boolean isStrictRoundRobin = true;
-        RouteDefinition.FilterConfig filterConfig = FilterUtil.findFilterConfigByName(context.getRoute().getFilterConfigs(), LOAD_BALANCE_FILTER_NAME);
-        if (filterConfig != null) {
-            RouteDefinition.LoadBalanceFilterConfig loadBalanceFilterConfig = JSONUtil.toBean(filterConfig.getConfig(), RouteDefinition.LoadBalanceFilterConfig.class);
+        RouteDefinition.LoadBalanceFilterConfig loadBalanceFilterConfig = FilterUtil.findFilterConfigByClass(context.getRoute().getFilterConfigs(), LOAD_BALANCE_FILTER_NAME, RouteDefinition.LoadBalanceFilterConfig.class);
+        if (loadBalanceFilterConfig != null) {
             isStrictRoundRobin = loadBalanceFilterConfig.isStrictRoundRobin();
         }
         String serviceName = context.getRequest().getServiceDefinition().getServiceName();
