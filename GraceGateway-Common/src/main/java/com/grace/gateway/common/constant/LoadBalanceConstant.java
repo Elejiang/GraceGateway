@@ -8,4 +8,6 @@ public interface LoadBalanceConstant {
 
     String RANDOM_LOAD_BALANCE_STRATEGY = "random_load_balance_strategy"; // 随机策略
 
+    String GRAY_LOAD_BALANCE_STRATEGY = "gray_load_balance_strategy"; // 灰度流量的策略
+
 }

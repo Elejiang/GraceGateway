@@ -16,12 +16,11 @@ public class ClientIpGrayStrategy implements GrayStrategy {
     @Override
     public boolean shouldRoute2Gray(GatewayContext context, List<ServiceInstance> instances) {
         if (instances.stream().anyMatch(instance -> instance.isEnabled() && !instance.isGray())) {
-            String host = context.getRequest().getHost();
             RouteDefinition.FilterConfig filterConfig = FilterUtil.findFilterConfigByName(context.getRoute().getFilterConfigs(), GRAY_FILTER_NAME);
             RouteDefinition.GrayFilterConfig grayFilterConfig = JSONUtil.toBean(filterConfig.getConfig(), RouteDefinition.GrayFilterConfig.class);
             double grayThreshold = instances.stream().mapToDouble(ServiceInstance::getThreshold).sum();
             grayThreshold = Math.min(grayThreshold, grayFilterConfig.getMaxGrayThreshold());
-            return Math.abs(host.hashCode()) % 100 <= grayThreshold * 100;
+            return Math.abs(context.getRequest().getHost().hashCode()) % 100 <= grayThreshold * 100;
         }
         return true;
     }

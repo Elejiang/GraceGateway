@@ -9,13 +9,15 @@ import com.grace.gateway.config.pojo.ServiceInstance;
 import com.grace.gateway.config.util.FilterUtil;
 import com.grace.gateway.core.context.GatewayContext;
 import com.grace.gateway.core.filter.Filter;
+import com.grace.gateway.core.filter.loadbalance.strategy.GrayLoadBalanceStrategy;
 import com.grace.gateway.core.filter.loadbalance.strategy.LoadBalanceStrategy;
 import com.grace.gateway.core.filter.loadbalance.strategy.RoundRobinLoadBalanceStrategy;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
-import static com.grace.gateway.common.constant.FilterConstant.*;
+import static com.grace.gateway.common.constant.FilterConstant.LOAD_BALANCE_FILTER_NAME;
+import static com.grace.gateway.common.constant.FilterConstant.LOAD_BALANCE_FILTER_ORDER;
 
 @Slf4j
 public class LoadBalanceFilter implements Filter {
@@ -26,14 +28,18 @@ public class LoadBalanceFilter implements Filter {
         if (filterConfig == null) {
             filterConfig = FilterUtil.buildDefaultLoadBalanceFilterConfig();
         }
-        LoadBalanceStrategy strategy = selectLoadBalanceStrategy(JSONUtil.toBean(filterConfig.getConfig(), RouteDefinition.LoadBalanceFilterConfig.class));
         // 获取服务所有实例
         List<ServiceInstance> instances = DynamicConfigManager.getInstance()
                 .getInstancesByServiceName(context.getRequest().getServiceDefinition().getServiceName())
                 .values().stream().toList();
+
+        LoadBalanceStrategy strategy;
         if (context.getRequest().isGray()) {
+            strategy = new GrayLoadBalanceStrategy(); // 灰度负载均衡策略
             // 如果请求是灰度的，再进行一遍过滤
             instances = instances.stream().filter(instance -> instance.isEnabled() && instance.isGray()).toList();
+        } else {
+            strategy = selectLoadBalanceStrategy(JSONUtil.toBean(filterConfig.getConfig(), RouteDefinition.LoadBalanceFilterConfig.class));
         }
         if (instances.isEmpty()) {
             throw new NotFoundException(ResponseCode.SERVICE_INSTANCE_NOT_FOUND);
