@@ -24,8 +24,6 @@ public class ServiceDefinition implements Serializable {
      */
     private boolean enabled = true;
 
-    public ServiceDefinition() {}
-
     public ServiceDefinition(String serviceName) {
         this.serviceName = serviceName;
     }

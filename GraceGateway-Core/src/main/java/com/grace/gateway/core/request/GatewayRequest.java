@@ -2,6 +2,7 @@ package com.grace.gateway.core.request;
 
 import com.alibaba.nacos.common.utils.StringUtils;
 import com.grace.gateway.common.constant.HttpConstant;
+import com.grace.gateway.config.pojo.ServiceDefinition;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.*;
 import io.netty.handler.codec.http.cookie.ServerCookieDecoder;
@@ -31,7 +32,7 @@ public class GatewayRequest {
     /**
      * 服务名
      */
-    private final String serviceName;
+    private final ServiceDefinition serviceDefinition;
 
     /**
      * 请求进入网关时间
@@ -49,7 +50,7 @@ public class GatewayRequest {
     private final String clientIp;
 
     /**
-     * 请求的地址：IP：port
+     * 请求的地址：IP:port
      */
     private final String host;
 
@@ -123,9 +124,14 @@ public class GatewayRequest {
      */
     private String modifyPath;
 
-    public GatewayRequest(String serviceName, Charset charset, String clientIp, String host, String uri, HttpMethod method, String contentType, HttpHeaders headers, FullHttpRequest fullHttpRequest) {
+    /**
+     * 是否灰度
+     */
+    private boolean isGray;
+
+    public GatewayRequest(ServiceDefinition serviceDefinition, Charset charset, String clientIp, String host, String uri, HttpMethod method, String contentType, HttpHeaders headers, FullHttpRequest fullHttpRequest) {
         this.id = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_DEFAULT_FORMATTER)) + "---" + UUID.randomUUID();
-        this.serviceName = serviceName;
+        this.serviceDefinition = serviceDefinition;
         this.beginTime = System.currentTimeMillis();
         this.charset = charset;
         this.clientIp = clientIp;

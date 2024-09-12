@@ -2,7 +2,9 @@ package com.grace.gateway.core.helper;
 
 import com.alibaba.nacos.common.utils.StringUtils;
 import com.grace.gateway.config.helper.RouteResolver;
+import com.grace.gateway.config.manager.DynamicConfigManager;
 import com.grace.gateway.config.pojo.RouteDefinition;
+import com.grace.gateway.config.pojo.ServiceDefinition;
 import com.grace.gateway.core.context.GatewayContext;
 import com.grace.gateway.core.request.GatewayRequest;
 import io.netty.channel.ChannelHandlerContext;
@@ -23,7 +25,8 @@ public class GatewayContextHelper {
     public static GatewayContext buildGatewayContext(FullHttpRequest request, ChannelHandlerContext ctx) {
         RouteDefinition route = RouteResolver.matchingRouteByUri(request.uri());
 
-        GatewayRequest gatewayRequest = buildGatewayRequest(route.getServiceName(), request, ctx);
+        GatewayRequest gatewayRequest = buildGatewayRequest(
+                DynamicConfigManager.getInstance().getServiceByName(route.getServiceName()), request, ctx);
 
         return new GatewayContext(ctx, gatewayRequest, route, HttpUtil.isKeepAlive(request));
     }
@@ -31,7 +34,7 @@ public class GatewayContextHelper {
     /**
      * 构建Request请求对象
      */
-    private static GatewayRequest buildGatewayRequest(String serviceName, FullHttpRequest fullHttpRequest, ChannelHandlerContext ctx) {
+    private static GatewayRequest buildGatewayRequest(ServiceDefinition serviceDefinition, FullHttpRequest fullHttpRequest, ChannelHandlerContext ctx) {
         HttpHeaders headers = fullHttpRequest.headers();
         String host = headers.get(HttpHeaderNames.HOST);
         HttpMethod method = fullHttpRequest.method();
@@ -41,7 +44,7 @@ public class GatewayContextHelper {
                 HttpUtil.getMimeType(fullHttpRequest).toString();
         Charset charset = HttpUtil.getCharset(fullHttpRequest, StandardCharsets.UTF_8);
 
-        return new GatewayRequest(serviceName, charset, clientIp, host, uri, method,
+        return new GatewayRequest(serviceDefinition, charset, clientIp, host, uri, method,
                 contentType, headers, fullHttpRequest);
     }
 

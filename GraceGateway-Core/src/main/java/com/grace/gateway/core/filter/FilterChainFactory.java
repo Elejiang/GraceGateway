@@ -4,16 +4,19 @@ import com.grace.gateway.config.pojo.RouteDefinition;
 import com.grace.gateway.core.context.GatewayContext;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+
+import static com.grace.gateway.common.constant.FilterConstant.GRAY_FILTER_NAME;
+import static com.grace.gateway.common.constant.FilterConstant.LOAD_BALANCE_FILTER_NAME;
 
 
 @Slf4j
 public class FilterChainFactory {
 
-    private static final Map<String, Filter> filterMap = new ConcurrentHashMap<>();
+    private static final Map<String, Filter> filterMap = new HashMap<>();
 
     static {
         ServiceLoader<Filter> serviceLoader = ServiceLoader.load(Filter.class);
@@ -34,15 +37,13 @@ public class FilterChainFactory {
     }
 
     private static void addPreFilter(FilterChain chain) {
-
+        addFilterIfPresent(chain, GRAY_FILTER_NAME);
+        addFilterIfPresent(chain, LOAD_BALANCE_FILTER_NAME);
     }
 
     private static void addFilter(FilterChain chain, Set<RouteDefinition.FilterConfig> filterConfigs) {
         for (RouteDefinition.FilterConfig filterConfig : filterConfigs) {
-            Filter filter = filterMap.get(filterConfig.getName());
-            if (null != filter) {
-                chain.add(filter);
-            } else {
+            if (!addFilterIfPresent(chain, filterConfig.getName())) {
                 log.info("not found filter: {}", filterConfig.getName());
             }
         }
@@ -50,6 +51,15 @@ public class FilterChainFactory {
 
     private static void addPostFilter(FilterChain chain) {
 
+    }
+
+    private static boolean addFilterIfPresent(FilterChain chain, String filterName) {
+        Filter filter = filterMap.get(filterName);
+        if (null != filter) {
+            chain.add(filter);
+            return true;
+        }
+        return false;
     }
 
 
