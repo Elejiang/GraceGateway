@@ -23,19 +23,33 @@ public class FilterChain {
         return this;
     }
 
-    public GatewayContext doFilter(GatewayContext ctx) {
-        if (filters.isEmpty()) {
-            return ctx;
-        }
-        try {
-            filters.sort(Comparator.comparingInt(Filter::getOrder));
-            for (Filter filter : filters) {
-                filter.doFilter(ctx);
+    public void doPreFilter(GatewayContext ctx) {
+        if (!filters.isEmpty()) {
+            try {
+                filters.sort(Comparator.comparingInt(Filter::getOrder));
+                for (Filter filter : filters) {
+                    filter.doPreFilter(ctx);
+                }
+            } catch (Exception e) {
+                log.error("执行过滤器发生异常,异常信息：{}", e.getMessage());
+                throw e;
             }
-        } catch (Exception e) {
-            log.error("执行过滤器发生异常,异常信息：{}", e.getMessage());
-            throw e;
         }
-        return ctx;
     }
+
+    public void doPostFilter(GatewayContext ctx) {
+        if (!filters.isEmpty()) {
+            try {
+                filters.sort(Comparator.comparing(Filter::getOrder, Comparator.reverseOrder()));
+                for (Filter filter : filters) {
+                    filter.doPostFilter(ctx);
+                }
+            } catch (Exception e) {
+                log.error("执行过滤器发生异常,异常信息：{}", e.getMessage());
+                throw e;
+            }
+        }
+    }
+
+
 }

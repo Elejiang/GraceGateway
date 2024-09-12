@@ -20,7 +20,7 @@ import static com.grace.gateway.common.constant.FilterConstant.GRAY_FILTER_ORDER
 public class GrayFilter implements Filter {
 
     @Override
-    public void doFilter(GatewayContext context) {
+    public void doPreFilter(GatewayContext context) {
         RouteDefinition.FilterConfig filterConfig = FilterUtil.findFilterConfigByName(context.getRoute().getFilterConfigs(), GRAY_FILTER_NAME);
         if (filterConfig == null) {
             filterConfig = FilterUtil.buildDefaultGrayFilterConfig();
@@ -42,6 +42,11 @@ public class GrayFilter implements Filter {
             // 灰度实例都没，不走灰度
             context.getRequest().setGray(false);
         }
+    }
+
+    @Override
+    public void doPostFilter(GatewayContext context) {
+
     }
 
     @Override

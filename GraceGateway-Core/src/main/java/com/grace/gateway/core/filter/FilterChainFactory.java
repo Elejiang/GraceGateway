@@ -26,14 +26,14 @@ public class FilterChainFactory {
         }
     }
 
-    public static FilterChain buildFilterChain(GatewayContext ctx) {
+    public static void buildFilterChain(GatewayContext ctx) {
         FilterChain chain = new FilterChain();
 
         addPreFilter(chain);
         addFilter(chain, ctx.getRoute().getFilterConfigs());
         addPostFilter(chain);
 
-        return chain;
+        ctx.setFilterChain(chain);
     }
 
     private static void addPreFilter(FilterChain chain) {

@@ -1,6 +1,7 @@
 package com.grace.gateway.core.context;
 
 import com.grace.gateway.config.pojo.RouteDefinition;
+import com.grace.gateway.core.filter.FilterChain;
 import com.grace.gateway.core.request.GatewayRequest;
 import com.grace.gateway.core.response.GatewayResponse;
 import io.netty.channel.ChannelHandlerContext;
@@ -28,6 +29,8 @@ public class GatewayContext {
     private int currentRetryTimes;
 
     private boolean keepAlive;
+
+    private FilterChain filterChain;
 
     public GatewayContext(ChannelHandlerContext nettyCtx, GatewayRequest request,
                           RouteDefinition route, boolean keepAlive) {
