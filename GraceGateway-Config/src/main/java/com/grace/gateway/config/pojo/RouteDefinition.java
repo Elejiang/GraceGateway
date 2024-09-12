@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import static com.grace.gateway.common.constant.GrayConstant.MAX_GRAY_THRESHOLD;
 import static com.grace.gateway.common.constant.GrayConstant.THRESHOLD_GRAY_STRATEGY;
+import static com.grace.gateway.common.constant.LoadBalanceConstant.ROUND_ROBIN_LOAD_BALANCE_STRATEGY;
 
 @Data
 public class RouteDefinition {
@@ -65,6 +66,21 @@ public class RouteDefinition {
          * 灰度流量最大比例
          */
         private double maxGrayThreshold = MAX_GRAY_THRESHOLD;
+
+    }
+
+    @Data
+    public static class LoadBalanceFilterConfig {
+
+        /**
+         * 负载均衡策略名，默认轮询
+         */
+        private String strategyName = ROUND_ROBIN_LOAD_BALANCE_STRATEGY;
+
+        /**
+         * 是否开启严格轮询
+         */
+        private boolean isStrictRoundRobin = true;
 
     }
 

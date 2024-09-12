@@ -11,8 +11,7 @@ import com.grace.gateway.core.filter.gray.strategy.GrayStrategy;
 import com.grace.gateway.core.filter.gray.strategy.ThresholdGrayStrategy;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 import static com.grace.gateway.common.constant.FilterConstant.GRAY_FILTER_NAME;
 import static com.grace.gateway.common.constant.FilterConstant.GRAY_FILTER_ORDER;
@@ -22,8 +21,7 @@ public class GrayFilter implements Filter {
 
     @Override
     public void doFilter(GatewayContext context) {
-        Set<RouteDefinition.FilterConfig> filterConfigs = context.getRoute().getFilterConfigs();
-        RouteDefinition.FilterConfig filterConfig = FilterUtil.findFilterConfigByName(filterConfigs, GRAY_FILTER_NAME);
+        RouteDefinition.FilterConfig filterConfig = FilterUtil.findFilterConfigByName(context.getRoute().getFilterConfigs(), GRAY_FILTER_NAME);
         if (filterConfig == null) {
             filterConfig = FilterUtil.buildDefaultGrayFilterConfig();
         }
@@ -32,14 +30,13 @@ public class GrayFilter implements Filter {
         }
 
         // 获取服务所有实例
-        Collection<ServiceInstance> instances = DynamicConfigManager.getInstance()
+        List<ServiceInstance> instances = DynamicConfigManager.getInstance()
                 .getInstancesByServiceName(context.getRequest().getServiceDefinition().getServiceName())
-                .values();
+                .values().stream().toList();
 
         if (instances.stream().anyMatch(instance -> instance.isEnabled() && instance.isGray())) {
             // 存在灰度实例
-            RouteDefinition.GrayFilterConfig grayFilterConfig = JSONUtil.toBean(filterConfig.getConfig(), RouteDefinition.GrayFilterConfig.class);
-            GrayStrategy strategy = selectGrayStrategy(grayFilterConfig);
+            GrayStrategy strategy = selectGrayStrategy(JSONUtil.toBean(filterConfig.getConfig(), RouteDefinition.GrayFilterConfig.class));
             context.getRequest().setGray(strategy.shouldRoute2Gray(context, instances));
         } else {
             // 灰度实例都没，不走灰度
