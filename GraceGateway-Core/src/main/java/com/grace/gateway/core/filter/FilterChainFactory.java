@@ -9,8 +9,7 @@ import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
 
-import static com.grace.gateway.common.constant.FilterConstant.GRAY_FILTER_NAME;
-import static com.grace.gateway.common.constant.FilterConstant.LOAD_BALANCE_FILTER_NAME;
+import static com.grace.gateway.common.constant.FilterConstant.*;
 
 
 @Slf4j
@@ -50,7 +49,7 @@ public class FilterChainFactory {
     }
 
     private static void addPostFilter(FilterChain chain) {
-
+        addFilterIfPresent(chain, ROUTE_FILTER_NAME);
     }
 
     private static boolean addFilterIfPresent(FilterChain chain, String filterName) {

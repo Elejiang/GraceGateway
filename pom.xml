@@ -35,6 +35,7 @@
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <hutool.version>5.8.26</hutool.version>
         <async-http-client.version>2.0.37</async-http-client.version>
+        <resilience4j.version>2.2.0</resilience4j.version>
     </properties>
 
     <dependencies>

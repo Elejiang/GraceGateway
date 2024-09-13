@@ -1,5 +1,6 @@
 package com.grace.gateway.config.pojo;
 
+import com.grace.gateway.common.enums.CircuitBreakerEnum;
 import lombok.Data;
 
 import java.util.Set;
@@ -25,15 +26,37 @@ public class RouteDefinition {
     // 路由顺序，当请求匹配到多个路由时，选择顺序小的
     private int order = 0;
 
-    // 超时时间，单位ms
-    private int timeout = 3000;
-
-    // 重试次数
-    private int retryTimes = 3;
+    // 系统弹性配置，熔断、降级、重试等
+    private ResilienceConfig resilience = new ResilienceConfig();
 
     // 路由需要走的过滤器
     private Set<FilterConfig> filterConfigs;
 
+    @Data
+    public static class ResilienceConfig {
+
+        private boolean enabled = true; // 是否开启弹性配置
+
+        private boolean retryEnabled = true; // 是否开启重试
+        private boolean circuitBreaker = true; // 是否开启熔断
+
+        // Retry
+        private int maxAttempts = 3; // 重试次数
+        private int waitDuration = 500; // 重试间隔
+
+        // CircuitBreaker
+        private int failureRateThreshold = 50; // 以百分比配置失败率阈值。当失败率大于等于阈值时，进行熔断，并进行服务降级
+        private int slowCallRateThreshold = 100; // 慢调用比例超过这个则进行熔断，并进行服务降级
+        private int slowCallDurationThreshold = 60000; // 单位ms，超过这个视为慢调用，这个应该需要比httpclient的请求超时时间httpRequestTimeout大，否则不会生效
+        private int permittedNumberOfCallsInHalfOpenState = 10; // 断路器在半开状态下允许通过的调用次数
+        private int maxWaitDurationInHalfOpenState = 0; // 断路器在半开状态下的最长等待时间，超过该配置值的话，断路器会从半开状态恢复为开启状态。配置是0时表示断路器会一直处于半开状态，直到所有允许通过的访问结束
+        private CircuitBreakerEnum type = CircuitBreakerEnum.COUNT_BASED; // 滑动窗口类型，如果是COUNT_BASED，则是计数，如果是TIME_BASED，则是时间，单位是秒
+        private int slidingWindowSize = 100; // 滑动窗口大小
+        private int minimumNumberOfCalls = 100; // 统计失败率或慢调用率的最小调用数
+        private int waitDurationInOpenState = 60000; // 断路器从开启过渡到半开应等待的时间，单位ms
+        private boolean automaticTransitionFromOpenToHalfOpenEnabled = false; // 是否开启额外线程监听断路器从开启到半开的状态变化，如果不开启，则需时间到了并且有请求才会到半开状态
+
+    }
 
     @Data
     public static class FilterConfig {

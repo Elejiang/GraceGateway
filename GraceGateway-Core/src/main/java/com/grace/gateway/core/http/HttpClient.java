@@ -1,7 +1,13 @@
 package com.grace.gateway.core.http;
 
 
+import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import org.asynchttpclient.AsyncHttpClient;
+import org.asynchttpclient.ListenableFuture;
+import org.asynchttpclient.Request;
+import org.asynchttpclient.Response;
+
+import java.util.concurrent.CompletableFuture;
 
 public class HttpClient {
 
@@ -18,6 +24,11 @@ public class HttpClient {
 
     public void initialized(AsyncHttpClient asyncHttpClient) {
         this.asyncHttpClient = asyncHttpClient;
+    }
+
+    public CompletableFuture<Response> executeRequest(Request request) {
+        ListenableFuture<Response> future = asyncHttpClient.executeRequest(request);
+        return future.toCompletableFuture();
     }
 
 

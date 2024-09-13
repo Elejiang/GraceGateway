@@ -10,4 +10,8 @@ public interface FilterConstant {
 
     int LOAD_BALANCE_FILTER_ORDER = Integer.MIN_VALUE + 1; // 负载均衡过滤器顺序
 
+    String ROUTE_FILTER_NAME = "route_filter"; // 路由过滤器名字
+
+    int ROUTE_FILTER_ORDER = Integer.MAX_VALUE; // 路由过滤器顺序
+
 }

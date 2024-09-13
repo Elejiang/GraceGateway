@@ -1,2 +1,3 @@
 com.grace.gateway.core.filter.loadbalance.LoadBalanceFilter
 com.grace.gateway.core.filter.gray.GrayFilter
+com.grace.gateway.core.filter.route.RouteFilter

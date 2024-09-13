@@ -60,6 +60,13 @@
             <version>${async-http-client.version}</version>
         </dependency>
 
+        <!--resilience4j-->
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-all</artifactId>
+            <version>${resilience4j.version}</version>
+        </dependency>
+
     </dependencies>
 
 </project>
