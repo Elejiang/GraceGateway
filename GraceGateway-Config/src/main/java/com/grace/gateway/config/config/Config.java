@@ -1,6 +1,5 @@
 package com.grace.gateway.config.config;
 
-import com.grace.gateway.config.HttpClientConfig;
 import com.grace.gateway.config.pojo.RouteDefinition;
 import lombok.Data;
 

@@ -5,7 +5,7 @@ import com.grace.gateway.common.enums.ResponseCode;
 import com.grace.gateway.common.exception.GatewayException;
 import com.grace.gateway.core.context.GatewayContext;
 import com.grace.gateway.core.filter.FilterChainFactory;
-import com.grace.gateway.core.helper.GatewayContextHelper;
+import com.grace.gateway.core.helper.ContextHelper;
 import com.grace.gateway.core.helper.ResponseHelper;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -21,16 +21,16 @@ public class NettyCoreProcessor implements NettyProcessor {
     @Override
     public void process(ChannelHandlerContext ctx, FullHttpRequest request) {
         try {
-            GatewayContext gatewayContext = GatewayContextHelper.buildGatewayContext(request, ctx);
+            GatewayContext gatewayContext = ContextHelper.buildGatewayContext(request, ctx);
             FilterChainFactory.buildFilterChain(gatewayContext);
             gatewayContext.getFilterChain().doPreFilter(gatewayContext);
         } catch (GatewayException e) {
             log.error("处理错误 {} {}", e.getCode(), e.getCode().getMessage());
-            FullHttpResponse httpResponse = ResponseHelper.getHttpResponse(e.getCode());
+            FullHttpResponse httpResponse = ResponseHelper.buildHttpResponse(e.getCode());
             doWriteAndRelease(ctx, request, httpResponse);
         } catch (Throwable t) {
             log.error("处理未知错误", t);
-            FullHttpResponse httpResponse = ResponseHelper.getHttpResponse(ResponseCode.INTERNAL_ERROR);
+            FullHttpResponse httpResponse = ResponseHelper.buildHttpResponse(ResponseCode.INTERNAL_ERROR);
             doWriteAndRelease(ctx, request, httpResponse);
         }
     }

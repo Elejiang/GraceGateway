@@ -6,12 +6,15 @@ import com.grace.gateway.config.manager.DynamicConfigManager;
 import com.grace.gateway.core.netty.NettyHttpServer;
 import com.grace.gateway.core.netty.processor.NettyCoreProcessor;
 import io.netty.buffer.PooledByteBufAllocator;
+import lombok.extern.slf4j.Slf4j;
 import org.asynchttpclient.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+@Slf4j
 public class TestAsyncHttpClient {
 
     private Config config;
@@ -26,14 +29,14 @@ public class TestAsyncHttpClient {
         nettyHttpServer = new NettyHttpServer(config, new NettyCoreProcessor());
         DefaultAsyncHttpClientConfig.Builder builder = new DefaultAsyncHttpClientConfig.Builder()
                 .setEventLoopGroup(nettyHttpServer.getEventLoopGroupWorker()) // 使用传入的Netty事件循环组
-                .setConnectTimeout(3000) // 连接超时设置
+                .setConnectTimeout(300000) // 连接超时设置
                 .setRequestTimeout(3000) // 请求超时设置
-                .setMaxRedirects(5) // 最大重定向次数
+                .setMaxRedirects(100) // 最大重定向次数
                 .setAllocator(PooledByteBufAllocator.DEFAULT) // 使用池化的ByteBuf分配器以提升性能
                 .setCompressionEnforced(true) // 强制压缩
-                .setMaxConnections(100) // 最大连接数
-                .setMaxConnectionsPerHost(100) // 每个主机的最大连接数
-                .setPooledConnectionIdleTimeout(500); // 连接池中空闲连接的超时时间
+                .setMaxConnections(10000) // 最大连接数
+                .setMaxConnectionsPerHost(10000) // 每个主机的最大连接数
+                .setPooledConnectionIdleTimeout(50000); // 连接池中空闲连接的超时时间
         // 根据配置创建异步HTTP客户端
         asyncHttpClient = new DefaultAsyncHttpClient(builder.build());
     }
@@ -45,9 +48,12 @@ public class TestAsyncHttpClient {
         builder.setMethod("GET");
         builder.setUrl(url);
         ListenableFuture<Response> future = asyncHttpClient.executeRequest(builder.build());
-        Response response = future.get(); // 阻塞
-        int statusCode = response.getStatusCode();
-        System.out.println(statusCode);
+//        System.out.println(future.get());
+        CompletableFuture<Response> responseCompletableFuture = future.toCompletableFuture();
+        responseCompletableFuture.whenComplete((response, throwable) -> {
+            log.info("{}, \n{}", response, throwable);
+        });
+        while (true) {}
     }
 
     @Test

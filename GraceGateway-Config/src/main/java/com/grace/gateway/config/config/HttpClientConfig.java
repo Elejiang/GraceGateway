@@ -1,4 +1,4 @@
-package com.grace.gateway.config;
+package com.grace.gateway.config.config;
 
 import lombok.Data;
 

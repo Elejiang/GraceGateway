@@ -1,6 +1,6 @@
 package com.grace.gateway.core.netty;
 
-import com.grace.gateway.config.HttpClientConfig;
+import com.grace.gateway.config.config.HttpClientConfig;
 import com.grace.gateway.config.config.Config;
 import com.grace.gateway.core.config.LifeCycle;
 import com.grace.gateway.core.http.HttpClient;

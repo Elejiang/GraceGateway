@@ -1,15 +1,11 @@
 package com.grace.gateway.core.helper;
 
 import com.alibaba.nacos.common.utils.StringUtils;
-import com.grace.gateway.config.helper.RouteResolver;
-import com.grace.gateway.config.manager.DynamicConfigManager;
-import com.grace.gateway.config.pojo.RouteDefinition;
 import com.grace.gateway.config.pojo.ServiceDefinition;
-import com.grace.gateway.core.context.GatewayContext;
 import com.grace.gateway.core.request.GatewayRequest;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
-import lombok.extern.slf4j.Slf4j;
+import org.asynchttpclient.Request;
 
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
@@ -19,33 +15,27 @@ import java.util.List;
 
 import static com.grace.gateway.common.constant.HttpConstant.HTTP_FORWARD_SEPARATOR;
 
-@Slf4j
-public class GatewayContextHelper {
+/**
+ * Netty服务端、网关、Http客户端之间的请求转换
+ */
+public class RequestHelper {
 
-    public static GatewayContext buildGatewayContext(FullHttpRequest request, ChannelHandlerContext ctx) {
-        RouteDefinition route = RouteResolver.matchingRouteByUri(request.uri());
-
-        GatewayRequest gatewayRequest = buildGatewayRequest(
-                DynamicConfigManager.getInstance().getServiceByName(route.getServiceName()), request, ctx);
-
-        return new GatewayContext(ctx, gatewayRequest, route, HttpUtil.isKeepAlive(request));
-    }
-
-    /**
-     * 构建Request请求对象
-     */
-    private static GatewayRequest buildGatewayRequest(ServiceDefinition serviceDefinition, FullHttpRequest fullHttpRequest, ChannelHandlerContext ctx) {
-        HttpHeaders headers = fullHttpRequest.headers();
-        String host = headers.get(HttpHeaderNames.HOST);
-        HttpMethod method = fullHttpRequest.method();
-        String uri = fullHttpRequest.uri();
-        String clientIp = getClientIp(ctx, fullHttpRequest);
+    public static GatewayRequest buildGatewayRequest(ServiceDefinition serviceDefinition, FullHttpRequest fullHttpRequest, ChannelHandlerContext ctx) {
+        HttpHeaders headers = fullHttpRequest.headers(); // 服务端的http请求头
+        String host = headers.get(HttpHeaderNames.HOST); // host
+        HttpMethod method = fullHttpRequest.method(); // http请求类型
+        String uri = fullHttpRequest.uri(); // uri
+        String clientIp = getClientIp(ctx, fullHttpRequest); // 客户端ip
         String contentType = HttpUtil.getMimeType(fullHttpRequest) == null ? null :
-                HttpUtil.getMimeType(fullHttpRequest).toString();
-        Charset charset = HttpUtil.getCharset(fullHttpRequest, StandardCharsets.UTF_8);
+                HttpUtil.getMimeType(fullHttpRequest).toString(); // 请求的MIME类型
+        Charset charset = HttpUtil.getCharset(fullHttpRequest, StandardCharsets.UTF_8); // 字符集
 
         return new GatewayRequest(serviceDefinition, charset, clientIp, host, uri, method,
                 contentType, headers, fullHttpRequest);
+    }
+
+    public static Request buildHttpClientRequest(GatewayRequest gatewayRequest) {
+        return gatewayRequest.build();
     }
 
     private static String getClientIp(ChannelHandlerContext ctx, FullHttpRequest request) {
@@ -64,6 +54,5 @@ public class GatewayContextHelper {
         }
         return clientIp;
     }
-
 
 }
