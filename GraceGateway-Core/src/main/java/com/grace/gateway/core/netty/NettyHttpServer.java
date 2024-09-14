@@ -18,6 +18,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.HttpServerExpectContinueHandler;
+import io.netty.util.ResourceLeakDetector;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -90,6 +91,7 @@ public class NettyHttpServer implements LifeCycle {
                     }
                 });
         serverBootstrap.bind().sync();
+        ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.ADVANCED);
         log.info("gateway startup on port {}", this.config.getPort());
     }
 
