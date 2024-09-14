@@ -10,4 +10,4 @@ spring:
         namespace: 7a552eec-cda7-41d5-b020-f73e8d3b8609
 
   application:
-    name: http-server
+    name: user-service

@@ -16,7 +16,6 @@
         <module>GraceGateway-Common</module>
         <module>GraceGateway-Config</module>
         <module>GraceGateway-Register</module>
-        <module>GraceGateway-Http</module>
     </modules>
 
     <properties>

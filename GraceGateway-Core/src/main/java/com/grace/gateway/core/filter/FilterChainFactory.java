@@ -41,6 +41,7 @@ public class FilterChainFactory {
     }
 
     private static void addFilter(FilterChain chain, Set<RouteDefinition.FilterConfig> filterConfigs) {
+        if (filterConfigs == null || filterConfigs.isEmpty()) return;
         for (RouteDefinition.FilterConfig filterConfig : filterConfigs) {
             if (!addFilterIfPresent(chain, filterConfig.getName())) {
                 log.info("not found filter: {}", filterConfig.getName());

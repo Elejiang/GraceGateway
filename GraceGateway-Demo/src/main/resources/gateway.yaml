@@ -1,9 +1,9 @@
 grace:
   gateway:
-    port: 9999
-    name: grace-gateway
+    name: gateway-1
+    port: 10000
     configCenter:
-      enable: true
+      enabled: true
       type: NACOS
       address: 127.0.0.1:8848
       nacos:
@@ -18,5 +18,6 @@ grace:
         group: GATEWAY_GROUP
 
     routes:
-      - id: 123
-        uri: aaa.com/**
+      - id: user-service-route
+        serviceName: user-service
+        uri: /api/user/**

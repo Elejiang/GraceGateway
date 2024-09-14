@@ -1,4 +1,4 @@
-package com.grace.gateway.http;
+package com.grace.gateway.user;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

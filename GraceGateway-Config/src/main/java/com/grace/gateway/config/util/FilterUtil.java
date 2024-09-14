@@ -12,7 +12,7 @@ import static com.grace.gateway.common.constant.FilterConstant.LOAD_BALANCE_FILT
 public class FilterUtil {
 
     public static RouteDefinition.FilterConfig findFilterConfigByName(Collection<RouteDefinition.FilterConfig> filterConfigs, String name) {
-        if (name == null || name.isEmpty()) return null;
+        if (name == null || name.isEmpty() || filterConfigs == null || filterConfigs.isEmpty()) return null;
         for (RouteDefinition.FilterConfig filterConfig : filterConfigs) {
             if (filterConfig == null || filterConfig.getName() == null) continue;
             if (filterConfig.getName().equals(name)) {
@@ -24,6 +24,7 @@ public class FilterUtil {
 
     public static <T> T findFilterConfigByClass(Collection<RouteDefinition.FilterConfig> filterConfigs, String name, Class<T> clazz) {
         RouteDefinition.FilterConfig filterConfig = findFilterConfigByName(filterConfigs, name);
+        if (filterConfig == null) return null;
         return BeanUtil.toBean(filterConfig.getConfig(), clazz);
     }
 

@@ -60,17 +60,14 @@ public class NacosConfigCenter implements ConfigCenterProcessor {
          * {
          *     "routes": [
          *         {
-         *             "id": "test1",
-         *             "serviceName": "user"
-         *         },
-         *         {
-         *             "id": "test2",
-         *             "serviceName": "order"
+         *             "id": "user-service-route",
+         *             "serviceName": "user-service",
+         *             "uri": "/api/user/**"
          *         }
          *     ]
          * }
          */
-        log.info("config from nacos: {}", configJson);
+        log.info("config from nacos: \n{}", configJson);
         List<RouteDefinition> routes = JSON.parseObject(configJson).getJSONArray("routes").toJavaList(RouteDefinition.class);
         listener.onRoutesChange(routes);
 
@@ -83,7 +80,7 @@ public class NacosConfigCenter implements ConfigCenterProcessor {
             @Override
             public void receiveConfigInfo(String configInfo) {
                 log.info("config change from nacos: {}", configInfo);
-                List<RouteDefinition> routes = JSON.parseObject(configJson).getJSONArray("routes").toJavaList(RouteDefinition.class);
+                List<RouteDefinition> routes = JSON.parseObject(configInfo).getJSONArray("routes").toJavaList(RouteDefinition.class);
                 listener.onRoutesChange(routes);
             }
         });

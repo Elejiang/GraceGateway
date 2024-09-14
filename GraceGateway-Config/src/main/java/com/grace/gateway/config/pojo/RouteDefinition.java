@@ -3,6 +3,7 @@ package com.grace.gateway.config.pojo;
 import com.grace.gateway.common.enums.CircuitBreakerEnum;
 import lombok.Data;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -31,7 +32,7 @@ public class RouteDefinition {
     private ResilienceConfig resilience = new ResilienceConfig();
 
     // 路由需要走的过滤器
-    private Set<FilterConfig> filterConfigs;
+    private Set<FilterConfig> filterConfigs = new HashSet<>();
 
     @Data
     public static class ResilienceConfig {

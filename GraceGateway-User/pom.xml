@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.grace</groupId>
-    <artifactId>GraceGateway-Http</artifactId>
+    <artifactId>GraceGateway-User</artifactId>
     <version>1.0</version>
 
     <properties>
