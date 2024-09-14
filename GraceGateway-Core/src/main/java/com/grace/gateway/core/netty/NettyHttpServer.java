@@ -11,7 +11,6 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
-import io.netty.channel.epoll.Epoll;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -49,7 +48,7 @@ public class NettyHttpServer implements LifeCycle {
 
     private void init() {
         this.serverBootstrap = new ServerBootstrap();
-        if (useEpoll()) {
+        if (SystemUtil.useEpoll()) {
             this.eventLoopGroupBoss = new EpollEventLoopGroup(config.getNetty().getEventLoopGroupBossNum(),
                     new DefaultThreadFactory("epoll-netty-boss-nio"));
             this.eventLoopGroupWorker = new EpollEventLoopGroup(config.getNetty().getEventLoopGroupWorkerNum(),
@@ -71,7 +70,7 @@ public class NettyHttpServer implements LifeCycle {
         // 配置服务器参数，如端口、TCP参数等
         serverBootstrap
                 .group(eventLoopGroupBoss, eventLoopGroupWorker)
-                .channel(useEpoll() ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
+                .channel(SystemUtil.useEpoll() ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
                 .option(ChannelOption.SO_BACKLOG, 1024)            // TCP连接的最大队列长度
                 .option(ChannelOption.SO_REUSEADDR, true)          // 允许端口重用
                 .option(ChannelOption.SO_KEEPALIVE, true)          // 保持连接检测
@@ -109,10 +108,6 @@ public class NettyHttpServer implements LifeCycle {
     @Override
     public boolean isStarted() {
         return start.get();
-    }
-
-    private boolean useEpoll() {
-        return SystemUtil.isLinuxPlatform() && Epoll.isAvailable();
     }
 
 }

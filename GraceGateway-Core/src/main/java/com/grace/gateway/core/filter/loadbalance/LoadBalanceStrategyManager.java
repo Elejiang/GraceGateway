@@ -1,6 +1,7 @@
 package com.grace.gateway.core.filter.loadbalance;
 
 import com.grace.gateway.core.filter.loadbalance.strategy.LoadBalanceStrategy;
+import com.grace.gateway.core.filter.loadbalance.strategy.RoundRobinLoadBalanceStrategy;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -22,7 +23,10 @@ public class LoadBalanceStrategyManager {
     }
 
     public static LoadBalanceStrategy getStrategy(String name) {
-        return strategyMap.get(name);
+        LoadBalanceStrategy strategy = strategyMap.get(name);
+        if (strategy == null)
+            strategy = new RoundRobinLoadBalanceStrategy();
+        return strategy;
     }
 
 }

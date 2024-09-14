@@ -1,6 +1,7 @@
 package com.grace.gateway.core.filter.gray;
 
 import com.grace.gateway.core.filter.gray.strategy.GrayStrategy;
+import com.grace.gateway.core.filter.gray.strategy.ThresholdGrayStrategy;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -22,7 +23,10 @@ public class GrayStrategyManager {
     }
 
     public static GrayStrategy getStrategy(String name) {
-        return strategyMap.get(name);
+        GrayStrategy strategy = strategyMap.get(name);
+        if (strategy == null)
+            strategy = new ThresholdGrayStrategy();
+        return strategy;
     }
 
 }

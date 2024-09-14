@@ -1,11 +1,15 @@
 package com.grace.gateway.core.netty;
 
-import com.grace.gateway.config.config.HttpClientConfig;
+import com.grace.gateway.common.util.SystemUtil;
 import com.grace.gateway.config.config.Config;
+import com.grace.gateway.config.config.HttpClientConfig;
 import com.grace.gateway.core.config.LifeCycle;
 import com.grace.gateway.core.http.HttpClient;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.EventLoopGroup;
+import io.netty.channel.epoll.EpollEventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.util.concurrent.DefaultThreadFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.DefaultAsyncHttpClient;
@@ -26,9 +30,15 @@ public class NettyHttpClient implements LifeCycle {
 
     private AsyncHttpClient asyncHttpClient;
 
-    public NettyHttpClient(Config config, EventLoopGroup eventLoopGroupWorker) {
+    public NettyHttpClient(Config config) {
         this.config = config;
-        this.eventLoopGroupWorker = eventLoopGroupWorker;
+        if (SystemUtil.useEpoll()) {
+            this.eventLoopGroupWorker = new EpollEventLoopGroup(config.getHttpClient().getEventLoopGroupWorkerNum(),
+                    new DefaultThreadFactory("epoll-http-client-worker-nio"));
+        } else {
+            this.eventLoopGroupWorker = new NioEventLoopGroup(config.getHttpClient().getEventLoopGroupWorkerNum(),
+                    new DefaultThreadFactory("default-http-client-worker-nio"));
+        }
     }
 
     @Override

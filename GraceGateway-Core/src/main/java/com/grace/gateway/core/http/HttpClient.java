@@ -1,7 +1,6 @@
 package com.grace.gateway.core.http;
 
 
-import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.ListenableFuture;
 import org.asynchttpclient.Request;

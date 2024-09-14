@@ -5,7 +5,9 @@ import org.junit.Test;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
 
 import static com.grace.gateway.common.constant.BasicConstant.DATE_DEFAULT_FORMATTER;
 
@@ -28,6 +30,56 @@ public class TestSimple {
         System.out.println(atomicInteger.incrementAndGet());
         System.out.println(atomicInteger.incrementAndGet());
         System.out.println(atomicInteger.incrementAndGet());
+    }
+
+    @Test
+    public void testAsync() throws InterruptedException {
+        CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+            System.out.println("异步任务执行完成");
+            throw new RuntimeException("异步异常");
+        });
+
+        Thread.sleep(1000);
+        System.out.println("添加后处理");
+        future.whenComplete((re, th) -> {
+            if (th != null) {
+                System.out.println("再抛异常");
+                throw new RuntimeException("再抛异常");
+            }
+            System.out.println("final1");
+        });
+        Thread.sleep(1000);
+        future.exceptionally(throwable -> {
+            System.out.println("接收到异常 + " + throwable);
+            return null;
+        });
+    }
+
+    @Test
+    public void testSupplierAsync() throws InterruptedException {
+        Supplier<CompletableFuture<Void>> supplier = () -> {
+            System.out.println("supplier begin");
+            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+                System.out.println("异步任务");
+                throw new RuntimeException();
+            });
+            future.whenComplete((re, th) -> {
+                if (th != null) {
+                    System.out.println("收到异常：" + th);
+                    throw new RuntimeException(th);
+                }
+                System.out.println("代码不走了");
+            });
+            return future;
+        };
+        CompletableFuture<Void> future = supplier.get();
+        Thread.sleep(2000);
+        future.exceptionally(throwable -> {
+            System.out.println("外面收到异常：" + throwable);
+            return null;
+        });
+
+
     }
 
 }

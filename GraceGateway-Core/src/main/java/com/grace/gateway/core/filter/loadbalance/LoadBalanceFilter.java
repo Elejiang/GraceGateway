@@ -67,9 +67,7 @@ public class LoadBalanceFilter implements Filter {
     }
 
     private LoadBalanceStrategy selectLoadBalanceStrategy(RouteDefinition.LoadBalanceFilterConfig loadBalanceFilterConfig) {
-        LoadBalanceStrategy strategy = LoadBalanceStrategyManager.getStrategy(loadBalanceFilterConfig.getStrategyName());
-        if (strategy == null) strategy = new RoundRobinLoadBalanceStrategy();
-        return strategy;
+        return LoadBalanceStrategyManager.getStrategy(loadBalanceFilterConfig.getStrategyName());
     }
 
 }

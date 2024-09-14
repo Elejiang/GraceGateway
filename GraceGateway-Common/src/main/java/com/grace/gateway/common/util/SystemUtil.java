@@ -1,6 +1,8 @@
 package com.grace.gateway.common.util;
 
 
+import io.netty.channel.epoll.Epoll;
+
 public class SystemUtil {
 	
     public static final String OS_NAME = System.getProperty("os.name");
@@ -25,6 +27,10 @@ public class SystemUtil {
 
     public static boolean isLinuxPlatform() {
         return isLinuxPlatform;
+    }
+
+    public static boolean useEpoll() {
+        return isLinuxPlatform() && Epoll.isAvailable();
     }
 
 }

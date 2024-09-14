@@ -1,14 +1,13 @@
 package com.grace.gateway.core.filter.route;
 
+import com.grace.gateway.common.enums.ResponseCode;
 import com.grace.gateway.config.pojo.RouteDefinition;
 import com.grace.gateway.core.context.GatewayContext;
 import com.grace.gateway.core.filter.Filter;
 import com.grace.gateway.core.helper.ContextHelper;
 import com.grace.gateway.core.helper.ResponseHelper;
-import com.grace.gateway.core.http.HttpClient;
-import org.asynchttpclient.Request;
+import com.grace.gateway.core.resilience.Resilience;
 import org.asynchttpclient.Response;
-
 
 import java.util.concurrent.CompletableFuture;
 
@@ -21,25 +20,16 @@ public class RouteFilter implements Filter {
     public void doPreFilter(GatewayContext context) {
         RouteDefinition.ResilienceConfig resilience = context.getRoute().getResilience();
         if (resilience.isEnabled()) { // 开启弹性配置
-
+            Resilience.getInstance().executeRequest(context);
         } else {
-            executeRoute(context);
+            CompletableFuture<Response> future = RouteUtil.buildRouteSupplier(context).get().toCompletableFuture();
+            future.exceptionally(throwable -> {
+                context.setResponse(ResponseHelper.buildGatewayResponse(ResponseCode.HTTP_RESPONSE_ERROR));
+                ContextHelper.writeBackResponse(context);
+                return null;
+            });
         }
 
-    }
-
-    public void executeRoute(GatewayContext context) {
-        Request request = context.getRequest().build();
-        CompletableFuture<Response> future = HttpClient.getInstance().executeRequest(request);
-        future.whenComplete(((response, throwable) -> {
-            if (throwable != null) {
-                context.setThrowable(throwable);
-                throw new RuntimeException(throwable);
-            }
-            context.setResponse(ResponseHelper.buildGatewayResponse(response));
-            context.getFilterChain().doPostFilter(context); // 过滤器后处理
-            ContextHelper.writeBackResponse(context); // 写回数据
-        }));
     }
 
     @Override

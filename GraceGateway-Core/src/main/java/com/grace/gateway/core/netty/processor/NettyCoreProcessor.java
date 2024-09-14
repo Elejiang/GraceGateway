@@ -7,7 +7,6 @@ import com.grace.gateway.core.context.GatewayContext;
 import com.grace.gateway.core.filter.FilterChainFactory;
 import com.grace.gateway.core.helper.ContextHelper;
 import com.grace.gateway.core.helper.ResponseHelper;
-import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.FullHttpRequest;

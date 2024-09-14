@@ -60,9 +60,7 @@ public class GrayFilter implements Filter {
     }
 
     private GrayStrategy selectGrayStrategy(RouteDefinition.GrayFilterConfig grayFilterConfig) {
-        GrayStrategy strategy = GrayStrategyManager.getStrategy(grayFilterConfig.getStrategyName());
-        if (strategy == null) strategy = new ThresholdGrayStrategy();
-        return strategy;
+        return GrayStrategyManager.getStrategy(grayFilterConfig.getStrategyName());
     }
 
 }

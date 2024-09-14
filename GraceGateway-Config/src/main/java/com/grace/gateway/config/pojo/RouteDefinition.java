@@ -6,6 +6,7 @@ import lombok.Data;
 import java.util.Set;
 import java.util.UUID;
 
+import static com.grace.gateway.common.constant.FallbackConstant.DEFAULT_FALLBACK_HANDLER_NAME;
 import static com.grace.gateway.common.constant.GrayConstant.MAX_GRAY_THRESHOLD;
 import static com.grace.gateway.common.constant.GrayConstant.THRESHOLD_GRAY_STRATEGY;
 import static com.grace.gateway.common.constant.LoadBalanceConstant.ROUND_ROBIN_LOAD_BALANCE_STRATEGY;
@@ -38,7 +39,8 @@ public class RouteDefinition {
         private boolean enabled = true; // 是否开启弹性配置
 
         private boolean retryEnabled = true; // 是否开启重试
-        private boolean circuitBreaker = true; // 是否开启熔断
+        private boolean circuitBreakerEnabled = true; // 是否开启熔断
+        private boolean fallbackEnabled = true; // 是否开启降级
 
         // Retry
         private int maxAttempts = 3; // 重试次数
@@ -55,6 +57,9 @@ public class RouteDefinition {
         private int minimumNumberOfCalls = 100; // 统计失败率或慢调用率的最小调用数
         private int waitDurationInOpenState = 60000; // 断路器从开启过渡到半开应等待的时间，单位ms
         private boolean automaticTransitionFromOpenToHalfOpenEnabled = false; // 是否开启额外线程监听断路器从开启到半开的状态变化，如果不开启，则需时间到了并且有请求才会到半开状态
+
+        // Fallback
+        private String fallbackHandlerName = DEFAULT_FALLBACK_HANDLER_NAME; // 默认降级策略名
 
     }
 
