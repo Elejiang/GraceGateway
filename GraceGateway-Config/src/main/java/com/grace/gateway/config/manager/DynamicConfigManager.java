@@ -14,25 +14,21 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DynamicConfigManager {
 
+    private static final DynamicConfigManager INSTANCE = new DynamicConfigManager();
     // 路由id对应的路由
     private final ConcurrentHashMap<String /* 路由id */, RouteDefinition> routeId2RouteMap = new ConcurrentHashMap<>();
-
     // 服务对应的路由
     private final ConcurrentHashMap<String /* 服务名 */, RouteDefinition> serviceName2RouteMap = new ConcurrentHashMap<>();
-
     // URI对应的路由
     private final ConcurrentHashMap<String /* URI路径 */, RouteDefinition> uri2RouteMap = new ConcurrentHashMap<>();
-
     // 服务
     private final ConcurrentHashMap<String /* 服务名 */, ServiceDefinition> serviceDefinitionMap = new ConcurrentHashMap<>();
-
     // 服务对应的实例
     private final ConcurrentHashMap<String /* 服务名 */, ConcurrentHashMap<String /* 实例id */, ServiceInstance>> serviceInstanceMap = new ConcurrentHashMap<>();
 
     /*********   单例   *********/
-    private DynamicConfigManager() {}
-
-    private static final DynamicConfigManager INSTANCE = new DynamicConfigManager();
+    private DynamicConfigManager() {
+    }
 
     public static DynamicConfigManager getInstance() {
         return INSTANCE;
@@ -75,23 +71,8 @@ public class DynamicConfigManager {
     }
 
     /*********   服务   *********/
-    public void updateServiceByName(String name, ServiceDefinition serviceDefinition) {
-        serviceDefinitionMap.put(name, serviceDefinition);
-    }
-
-    public void updateServices(Collection<ServiceDefinition> services) {
-        updateServices(services, false);
-    }
-
-    public void updateServices(Collection<ServiceDefinition> services, boolean clear) {
-        if (services == null || services.isEmpty()) return;
-        if (clear) {
-            serviceDefinitionMap.clear();
-        }
-        for (ServiceDefinition service : services) {
-            if (service == null) continue;
-            serviceDefinitionMap.put(service.getServiceName(), service);
-        }
+    public void updateService(ServiceDefinition serviceDefinition) {
+        serviceDefinitionMap.put(serviceDefinition.getServiceName(), serviceDefinition);
     }
 
     public ServiceDefinition getServiceByName(String name) {
@@ -101,6 +82,14 @@ public class DynamicConfigManager {
     /*********   实例   *********/
     public void addServiceInstance(String serviceName, ServiceInstance instance) {
         serviceInstanceMap.computeIfAbsent(serviceName, k -> new ConcurrentHashMap<>()).put(instance.getInstanceId(), instance);
+    }
+
+    public void updateInstances(ServiceDefinition serviceDefinition, Set<ServiceInstance> newInstances) {
+        ConcurrentHashMap<String, ServiceInstance> oldInstancesMap = serviceInstanceMap.computeIfAbsent(serviceDefinition.getServiceName(), k -> new ConcurrentHashMap<>());
+        oldInstancesMap.clear();
+        for (ServiceInstance newInstance : newInstances) {
+            oldInstancesMap.put(newInstance.getInstanceId(), newInstance);
+        }
     }
 
     public void removeServiceInstance(String serviceName, ServiceInstance instance) {

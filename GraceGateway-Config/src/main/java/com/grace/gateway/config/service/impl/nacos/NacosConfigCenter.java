@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grace.gateway.config.config.ConfigCenter;
 import com.grace.gateway.config.config.lib.nacos.NacosConfig;
 import com.grace.gateway.config.pojo.RouteDefinition;
-import com.grace.gateway.config.service.AbstractConfigCenterProcessor;
+import com.grace.gateway.config.service.ConfigCenterProcessor;
 import com.grace.gateway.config.service.RoutesChangeListener;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -19,26 +19,41 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
-public class NacosConfigCenter extends AbstractConfigCenterProcessor {
+public class NacosConfigCenter implements ConfigCenterProcessor {
+
+    /**
+     * 配置
+     */
+    private ConfigCenter configCenter;
 
     /**
      * Nacos提供的与配置中心进行交互的接口
      */
     private ConfigService configService;
 
-    public NacosConfigCenter(ConfigCenter configCenter) {
-        super(configCenter);
-    }
+    /**
+     * 是否完成初始化
+     */
+    private final AtomicBoolean init = new AtomicBoolean(false);
+
 
     @SneakyThrows(NacosException.class)
-    protected void initialize() {
+    public void init(ConfigCenter configCenter) {
+        if (!configCenter.isEnabled() || !init.compareAndSet(false, true)) {
+            return;
+        }
+        this.configCenter = configCenter;
         this.configService = NacosFactory.createConfigService(buildProperties(configCenter));
     }
 
     @SneakyThrows(NacosException.class)
-    protected void subscribeConfigChange(RoutesChangeListener listener) {
+    public void subscribeRoutesChange(RoutesChangeListener listener) {
+        if (!configCenter.isEnabled() || !init.get()) {
+            return;
+        }
         NacosConfig nacos = configCenter.getNacos();
         String configJson = configService.getConfig(nacos.getDataId(), nacos.getGroup(), nacos.getTimeout());
         /* configJson:

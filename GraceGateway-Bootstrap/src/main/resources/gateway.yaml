@@ -1,0 +1,26 @@
+grace:
+  gateway:
+    name: gateway-1
+    configCenter:
+      enable: true
+      type: NACOS
+      address: 127.0.0.1:8848
+      nacos:
+        namespace: 7a552eec-cda7-41d5-b020-f73e8d3b8609
+        group: GATEWAY_GROUP
+        dataId: grace-gateway
+    registerCenter:
+      type: NACOS
+      address: 127.0.0.1:8848
+      nacos:
+        namespace: 7a552eec-cda7-41d5-b020-f73e8d3b8609
+        group: GATEWAY_GROUP
+
+    routes:
+      - id: userRoute
+        serviceName: user
+        uri: /api/user/**
+
+      - id: orderRoute
+        serviceName: order
+        uri: /api/order/**

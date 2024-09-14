@@ -41,7 +41,7 @@ public class NacosRegisterCenter implements RegisterCenterProcessor {
     /**
      * 注册中心配置
      */
-    private final Config config;
+    private Config config;
 
     /**
      * 主要用于维护服务实例信息
@@ -61,15 +61,13 @@ public class NacosRegisterCenter implements RegisterCenterProcessor {
 
     private final AtomicBoolean init = new AtomicBoolean(false);
 
-    public NacosRegisterCenter(Config config) {
-        this.config = config;
-        init();
-    }
 
     @SneakyThrows(Exception.class)
     @Override
-    public void init() {
+    public void init(Config config) {
         if (!init.compareAndSet(false, true)) return;
+        this.config = config;
+
         String group = config.getRegisterCenter().getNacos().getGroup();
 
         Properties properties = buildProperties(config.getRegisterCenter());

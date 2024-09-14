@@ -10,14 +10,16 @@ public class TestRegister {
     @Test
     public void testRegister() {
         Config config = ConfigLoader.load(null);
-        new NacosRegisterCenter(config);
+        NacosRegisterCenter center = new NacosRegisterCenter();
+        center.init(config);
         while(true) {}
     }
 
     @Test
     public void testRegisterSub() {
         Config config = ConfigLoader.load(null);
-        NacosRegisterCenter center = new NacosRegisterCenter(config);
+        NacosRegisterCenter center = new NacosRegisterCenter();
+        center.init(config);
         center.subscribeServiceChange(((serviceDefinition, newInstances) -> {
             System.out.println(serviceDefinition);
             System.out.println(newInstances);

@@ -24,7 +24,8 @@ public class TestConfig {
 
     @Test
     public void testNacosConfig() {
-        ConfigCenterProcessor processor = new NacosConfigCenter(config.getConfigCenter());
+        ConfigCenterProcessor processor = new NacosConfigCenter();
+        processor.init(config.getConfigCenter());
         processor.subscribeRoutesChange(i -> {});
     }
 
