@@ -42,6 +42,7 @@ public class RouteDefinition {
         private boolean retryEnabled = true; // 是否开启重试
         private boolean circuitBreakerEnabled = true; // 是否开启熔断
         private boolean fallbackEnabled = true; // 是否开启降级
+        private boolean bulkheadEnabled = false; // 是否开启信号量隔离
 
         // Retry
         private int maxAttempts = 3; // 重试次数
@@ -61,6 +62,11 @@ public class RouteDefinition {
 
         // Fallback
         private String fallbackHandlerName = DEFAULT_FALLBACK_HANDLER_NAME; // 默认降级策略名
+
+        // Bulkhead
+        private int maxConcurrentCalls = 1000; // 信号数量
+        private int maxWaitDuration = 0; // 最大等待时间
+        private boolean fairCallHandlingEnabled = false; // 是否公平竞争信号量
 
     }
 

@@ -5,7 +5,6 @@ import com.grace.gateway.core.netty.NettyHttpClient;
 import com.grace.gateway.core.netty.NettyHttpServer;
 import com.grace.gateway.core.netty.processor.NettyCoreProcessor;
 
-
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Container implements LifeCycle {
