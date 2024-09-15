@@ -9,6 +9,7 @@ import com.grace.gateway.core.helper.ContextHelper;
 import com.grace.gateway.core.helper.ResponseHelper;
 import com.grace.gateway.core.resilience.fallback.FallbackHandler;
 import com.grace.gateway.core.resilience.fallback.FallbackHandlerManager;
+import io.github.resilience4j.bulkhead.Bulkhead;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.retry.Retry;
 import org.asynchttpclient.Response;
@@ -25,7 +26,8 @@ public class Resilience {
 
     ScheduledExecutorService retryScheduler = Executors.newScheduledThreadPool(10);
 
-    private Resilience() {}
+    private Resilience() {
+    }
 
     public static Resilience getInstance() {
         return INSTANCE;
@@ -37,8 +39,12 @@ public class Resilience {
 
         Retry retry = ResilienceFactory.buildRetry(resilienceConfig, serviceName);
         CircuitBreaker circuitBreaker = ResilienceFactory.buildCircuitBreaker(resilienceConfig, serviceName);
+        Bulkhead bulkhead = ResilienceFactory.buildBulkHead(resilienceConfig, serviceName);
 
         Supplier<CompletionStage<Response>> supplier = RouteUtil.buildRouteSupplier(gatewayContext);
+        if (bulkhead != null) {
+            supplier = Bulkhead.decorateCompletionStage(bulkhead, supplier);
+        }
         if (retry != null) {
             supplier = Retry.decorateCompletionStage(retry, retryScheduler, supplier);
         }
@@ -46,7 +52,7 @@ public class Resilience {
             supplier = CircuitBreaker.decorateCompletionStage(circuitBreaker, supplier);
         }
 
-        supplier.get().exceptionally(throwable -> { // 发送熔断
+        supplier.get().exceptionally(throwable -> {
             if (resilienceConfig.isFallbackEnabled()) { // 执行降级
                 FallbackHandler handler = FallbackHandlerManager.getHandler(resilienceConfig.getFallbackHandlerName());
                 handler.handle(throwable, gatewayContext);
