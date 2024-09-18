@@ -2,9 +2,7 @@ package com.grace.gateway.core.resilience;
 
 import com.grace.gateway.common.enums.CircuitBreakerEnum;
 import com.grace.gateway.config.pojo.RouteDefinition;
-import io.github.resilience4j.bulkhead.Bulkhead;
-import io.github.resilience4j.bulkhead.BulkheadConfig;
-import io.github.resilience4j.bulkhead.BulkheadRegistry;
+import io.github.resilience4j.bulkhead.*;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
@@ -54,6 +52,18 @@ public class ResilienceFactory {
                 .maxWaitDuration(Duration.ofMillis(resilienceConfig.getMaxWaitDuration()))
                 .fairCallHandlingStrategyEnabled(resilienceConfig.isFairCallHandlingEnabled()).build();
         return BulkheadRegistry.of(bulkheadConfig).bulkhead(serviceName);
+    }
+
+    public static ThreadPoolBulkhead buildThreadPoolBulkhead(RouteDefinition.ResilienceConfig resilienceConfig, String serviceName) {
+        if (!resilienceConfig.isThreadPoolBulkheadEnabled()) {
+            return null;
+        }
+        ThreadPoolBulkheadConfig threadPoolBulkheadConfig = ThreadPoolBulkheadConfig.custom()
+                .coreThreadPoolSize(resilienceConfig.getCoreThreadPoolSize())
+                .maxThreadPoolSize(resilienceConfig.getMaxThreadPoolSize())
+                .queueCapacity(resilienceConfig.getQueueCapacity())
+                .build();
+        return ThreadPoolBulkheadRegistry.of(threadPoolBulkheadConfig).bulkhead(serviceName);
     }
 
     private static CircuitBreakerConfig.SlidingWindowType slidingWindowTypeConvert(CircuitBreakerEnum from) {
