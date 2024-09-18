@@ -1,6 +1,7 @@
 package com.grace.gateway.config.pojo;
 
 import com.grace.gateway.common.enums.CircuitBreakerEnum;
+import com.grace.gateway.common.enums.FlowEnum;
 import com.grace.gateway.common.enums.ResilienceEnum;
 import lombok.Data;
 
@@ -11,6 +12,7 @@ import static com.grace.gateway.common.constant.GrayConstant.MAX_GRAY_THRESHOLD;
 import static com.grace.gateway.common.constant.GrayConstant.THRESHOLD_GRAY_STRATEGY;
 import static com.grace.gateway.common.constant.LoadBalanceConstant.ROUND_ROBIN_LOAD_BALANCE_STRATEGY;
 import static com.grace.gateway.common.constant.LoadBalanceConstant.VIRTUAL_NODE_NUM;
+import static com.grace.gateway.common.enums.FlowEnum.TOKEN_BUCKET;
 import static com.grace.gateway.common.enums.ResilienceEnum.*;
 
 @Data
@@ -30,6 +32,8 @@ public class RouteDefinition {
 
     // 系统弹性配置，熔断、降级、重试等
     private ResilienceConfig resilience = new ResilienceConfig();
+
+    private FlowConfig flow = new FlowConfig();
 
     // 路由需要走的过滤器
     private Set<FilterConfig> filterConfigs = new HashSet<>();
@@ -79,6 +83,34 @@ public class RouteDefinition {
     }
 
     @Data
+    public static class FlowConfig {
+
+        /**
+         * 是否开启流控
+         */
+        private boolean enabled = false;
+
+        /**
+         * 流控类型
+         */
+        private FlowEnum type = TOKEN_BUCKET;
+
+        /**
+         * 容量
+         */
+        private int capacity = 1000;
+
+        /**
+         * 速率
+         * 如果是滑动窗口则是窗口大小，单位 ms
+         * 如果是令牌桶，则是令牌桶生成速率，单位 个/s
+         * 如果是漏桶，则是漏桶速率，单位 ms/个
+         */
+        private int rate = 500;
+
+    }
+
+    @Data
     public static class FilterConfig {
 
         /**
@@ -97,9 +129,9 @@ public class RouteDefinition {
         private String config;
 
     }
-
     @Data
     public static class GrayFilterConfig {
+
 
         /**
          * 灰度策略名，默认根据流量
@@ -112,9 +144,9 @@ public class RouteDefinition {
         private double maxGrayThreshold = MAX_GRAY_THRESHOLD;
 
     }
-
     @Data
     public static class LoadBalanceFilterConfig {
+
 
         /**
          * 负载均衡策略名，默认轮询

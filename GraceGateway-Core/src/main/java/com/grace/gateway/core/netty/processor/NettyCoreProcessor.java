@@ -3,8 +3,10 @@ package com.grace.gateway.core.netty.processor;
 
 import com.grace.gateway.common.enums.ResponseCode;
 import com.grace.gateway.common.exception.GatewayException;
+import com.grace.gateway.config.pojo.RouteDefinition;
 import com.grace.gateway.core.context.GatewayContext;
 import com.grace.gateway.core.filter.FilterChainFactory;
+import com.grace.gateway.core.flow.FlowProcessor;
 import com.grace.gateway.core.helper.ContextHelper;
 import com.grace.gateway.core.helper.ResponseHelper;
 import io.netty.channel.ChannelFutureListener;
@@ -23,7 +25,17 @@ public class NettyCoreProcessor implements NettyProcessor {
         try {
             GatewayContext gatewayContext = ContextHelper.buildGatewayContext(request, ctx);
             FilterChainFactory.buildFilterChain(gatewayContext);
-            gatewayContext.getFilterChain().doPreFilter(gatewayContext);
+
+            RouteDefinition.FlowConfig flowConfig = gatewayContext.getRoute().getFlow();
+            if (flowConfig == null) {
+                flowConfig = new RouteDefinition.FlowConfig();
+            }
+
+            if (!flowConfig.isEnabled()) { // 如果没有开启流控
+                gatewayContext.getFilterChain().doPreFilter(gatewayContext);
+            } else {
+                FlowProcessor.getInstance().doFlow(gatewayContext, flowConfig);
+            }
         } catch (GatewayException e) {
             log.error("处理错误 {} {}", e.getCode(), e.getCode().getMessage());
             FullHttpResponse httpResponse = ResponseHelper.buildHttpResponse(e.getCode());
