@@ -5,9 +5,11 @@ import com.grace.gateway.config.pojo.ServiceDefinition;
 import com.grace.gateway.config.pojo.ServiceInstance;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * 动态配置管理，缓存从配置中心拉取下来的配置
@@ -15,6 +17,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DynamicConfigManager {
 
     private static final DynamicConfigManager INSTANCE = new DynamicConfigManager();
+    // 路由规则变化监听器
+    private final ConcurrentHashMap<String /* 服务名 */, List<RouteListener>> routeListenerMap = new ConcurrentHashMap<>();
     // 路由id对应的路由
     private final ConcurrentHashMap<String /* 路由id */, RouteDefinition> routeId2RouteMap = new ConcurrentHashMap<>();
     // 服务对应的路由
@@ -102,6 +106,19 @@ public class DynamicConfigManager {
 
     public Map<String, ServiceInstance> getInstancesByServiceName(String serviceName) {
         return serviceInstanceMap.get(serviceName);
+    }
+
+    /*********   监听   *********/
+    public void addRouteListener(String serviceName, RouteListener listener) {
+        routeListenerMap.computeIfAbsent(serviceName, key -> new CopyOnWriteArrayList<>()).add(listener);
+    }
+
+    public void changeRoute(RouteDefinition routeDefinition) {
+        List<RouteListener> routeListeners = routeListenerMap.get(routeDefinition.getServiceName());
+        if (routeListeners == null || routeListeners.isEmpty()) return;
+        for (RouteListener routeListener : routeListeners) {
+            routeListener.changeOnRoute(routeDefinition);
+        }
     }
 
 }

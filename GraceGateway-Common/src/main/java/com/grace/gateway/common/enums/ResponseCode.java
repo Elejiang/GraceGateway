@@ -21,7 +21,7 @@ public enum ResponseCode {
     /* 5xx */
     SERVICE_UNAVAILABLE(HttpResponseStatus.SERVICE_UNAVAILABLE, "服务暂时不可用,请稍后再试"),
 
-    GATEWAY_FALLBACK(HttpResponseStatus.GATEWAY_TIMEOUT, "请求超时，触发熔断降级"),
+    GATEWAY_FALLBACK(HttpResponseStatus.GATEWAY_TIMEOUT, "业务暂时不可用，触发熔断降级"),
     REQUEST_TIMEOUT(HttpResponseStatus.GATEWAY_TIMEOUT, "连接下游服务超时"),
 
     INTERNAL_ERROR(HttpResponseStatus.INTERNAL_SERVER_ERROR, "网关内部错误"),

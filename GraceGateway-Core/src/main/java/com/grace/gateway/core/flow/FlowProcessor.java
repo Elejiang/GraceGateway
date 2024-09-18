@@ -1,5 +1,7 @@
 package com.grace.gateway.core.flow;
 
+import cn.hutool.core.collection.ConcurrentHashSet;
+import com.grace.gateway.config.manager.DynamicConfigManager;
 import com.grace.gateway.config.pojo.RouteDefinition;
 import com.grace.gateway.core.algorithm.LeakyBucketRateLimiter;
 import com.grace.gateway.core.algorithm.SlidingWindowRateLimiter;
@@ -7,12 +9,14 @@ import com.grace.gateway.core.algorithm.TokenBucketRateLimiter;
 import com.grace.gateway.core.context.GatewayContext;
 import io.netty.channel.EventLoop;
 
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class FlowProcessor {
 
-    // TODO 缓存一致
     private final ConcurrentHashMap<String /* 服务名 */, RateLimiter> rateLimiterMap = new ConcurrentHashMap<>();
+
+    private final Set<String> addListener = new ConcurrentHashSet<>();
 
     private FlowProcessor() {}
 
@@ -24,8 +28,15 @@ public class FlowProcessor {
 
     public void doFlow(GatewayContext context, RouteDefinition.FlowConfig flowConfig) {
         String serviceName = context.getRequest().getServiceDefinition().getServiceName();
-        RateLimiter rateLimiter = rateLimiterMap.computeIfAbsent(serviceName,
-                key -> initRateLimiter(flowConfig, context.getNettyCtx().channel().eventLoop()));
+        RateLimiter rateLimiter = rateLimiterMap.computeIfAbsent(serviceName, name -> {
+            if (!addListener.contains(name)) {
+                DynamicConfigManager.getInstance().addRouteListener(name, newRoute -> {
+                    rateLimiterMap.remove(newRoute.getServiceName());
+                });
+                addListener.add(name);
+            }
+            return initRateLimiter(flowConfig, context.getNettyCtx().channel().eventLoop());
+        });
         rateLimiter.tryConsume(context);
     }
 

@@ -26,7 +26,6 @@ public class FilterChain {
     public void doPreFilter(GatewayContext ctx) {
         if (!filters.isEmpty()) {
             try {
-                filters.sort(Comparator.comparingInt(Filter::getOrder));
                 for (Filter filter : filters) {
                     filter.doPreFilter(ctx);
                 }
@@ -40,15 +39,18 @@ public class FilterChain {
     public void doPostFilter(GatewayContext ctx) {
         if (!filters.isEmpty()) {
             try {
-                filters.sort(Comparator.comparing(Filter::getOrder, Comparator.reverseOrder()));
-                for (Filter filter : filters) {
-                    filter.doPostFilter(ctx);
+                for (int i = filters.size() - 1; i >= 0; i--) {
+                    filters.get(i).doPostFilter(ctx);
                 }
             } catch (Exception e) {
                 log.error("执行过滤器发生异常,异常信息：{}", e.getMessage());
                 throw e;
             }
         }
+    }
+
+    public void sort() {
+        filters.sort(Comparator.comparingInt(Filter::getOrder));
     }
 
 

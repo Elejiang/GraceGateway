@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class HttpClientConfig {
 
-    private int eventLoopGroupWorkerNum = Runtime.getRuntime().availableProcessors(); // worker数量
+    private int eventLoopGroupWorkerNum = Runtime.getRuntime().availableProcessors() * 2; // worker数量
 
     private int httpConnectTimeout = 30 * 1000; // 连接超时时间
 
