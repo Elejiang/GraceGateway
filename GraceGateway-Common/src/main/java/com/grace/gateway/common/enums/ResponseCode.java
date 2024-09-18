@@ -11,16 +11,11 @@ public enum ResponseCode {
 
 
     /* 4xx */
-    VERIFICATION_FAILED(HttpResponseStatus.BAD_REQUEST, "请求参数校验失败"),
-
     PATH_NO_MATCHED(HttpResponseStatus.NOT_FOUND, "没有找到匹配的路径, 请求快速失败"),
     SERVICE_DEFINITION_NOT_FOUND(HttpResponseStatus.NOT_FOUND, "未找到对应的服务定义"),
     SERVICE_INSTANCE_NOT_FOUND(HttpResponseStatus.NOT_FOUND, "未找到对应的服务实例"),
 
-    UNAUTHORIZED(HttpResponseStatus.UNAUTHORIZED, "用户未登陆"),
-
-    BLACKLIST(HttpResponseStatus.FORBIDDEN, "请求IP在黑名单"),
-    WHITELIST(HttpResponseStatus.FORBIDDEN, "请求IP不在白名单"),
+    TOO_MANY_REQUESTS(HttpResponseStatus.TOO_MANY_REQUESTS, "请求过多，请稍后再试"),
 
 
     /* 5xx */

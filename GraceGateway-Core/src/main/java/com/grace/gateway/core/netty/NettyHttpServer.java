@@ -20,7 +20,6 @@ import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.HttpServerExpectContinueHandler;
 import io.netty.util.ResourceLeakDetector;
 import io.netty.util.concurrent.DefaultThreadFactory;
-import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,7 +37,6 @@ public class NettyHttpServer implements LifeCycle {
     private final AtomicBoolean start = new AtomicBoolean(false);
     private ServerBootstrap serverBootstrap;
     private EventLoopGroup eventLoopGroupBoss;
-    @Getter
     private EventLoopGroup eventLoopGroupWorker;
 
     public NettyHttpServer(Config config, NettyProcessor nettyProcessor) {
