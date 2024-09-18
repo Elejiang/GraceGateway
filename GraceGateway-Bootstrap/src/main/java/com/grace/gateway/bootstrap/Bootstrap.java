@@ -3,6 +3,7 @@ package com.grace.gateway.bootstrap;
 import com.grace.gateway.config.config.Config;
 import com.grace.gateway.config.loader.ConfigLoader;
 import com.grace.gateway.config.manager.DynamicConfigManager;
+import com.grace.gateway.config.pojo.RouteDefinition;
 import com.grace.gateway.config.service.ConfigCenterProcessor;
 import com.grace.gateway.core.config.Container;
 import com.grace.gateway.register.service.RegisterCenterProcessor;
@@ -50,6 +51,9 @@ public class Bootstrap {
         configCenterProcessor.init(config.getConfigCenter());
         configCenterProcessor.subscribeRoutesChange(newRoutes -> {
             DynamicConfigManager.getInstance().updateRoutes(newRoutes, true);
+            for (RouteDefinition newRoute : newRoutes) {
+                DynamicConfigManager.getInstance().changeRoute(newRoute);
+            }
         });
     }
 

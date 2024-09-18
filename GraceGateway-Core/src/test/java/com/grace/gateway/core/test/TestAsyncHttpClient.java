@@ -6,6 +6,7 @@ import com.grace.gateway.config.manager.DynamicConfigManager;
 import com.grace.gateway.core.netty.NettyHttpServer;
 import com.grace.gateway.core.netty.processor.NettyCoreProcessor;
 import io.netty.buffer.PooledByteBufAllocator;
+import io.netty.channel.DefaultEventLoopGroup;
 import lombok.extern.slf4j.Slf4j;
 import org.asynchttpclient.*;
 import org.junit.Before;
@@ -28,7 +29,7 @@ public class TestAsyncHttpClient {
         config = ConfigLoader.load(null);
         nettyHttpServer = new NettyHttpServer(config, new NettyCoreProcessor());
         DefaultAsyncHttpClientConfig.Builder builder = new DefaultAsyncHttpClientConfig.Builder()
-                .setEventLoopGroup(nettyHttpServer.getEventLoopGroupWorker()) // 使用传入的Netty事件循环组
+                .setEventLoopGroup(new DefaultEventLoopGroup()) // 使用传入的Netty事件循环组
                 .setConnectTimeout(300000) // 连接超时设置
                 .setRequestTimeout(3000) // 请求超时设置
                 .setMaxRedirects(100) // 最大重定向次数

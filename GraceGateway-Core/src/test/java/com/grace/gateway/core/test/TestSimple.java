@@ -4,8 +4,10 @@ import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
@@ -82,8 +84,14 @@ public class TestSimple {
             System.out.println("外面收到异常2：" + throwable);
             return null;
         });
+    }
 
-
+    @Test
+    public void testMap() {
+        Map<String, String> map = new ConcurrentHashMap<>();
+        System.out.println(map.get("aaa"));
+        map.computeIfAbsent("aaa", name -> "vvv");
+        System.out.println(map.get("aaa"));
     }
 
 }
