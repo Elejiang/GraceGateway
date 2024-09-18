@@ -75,7 +75,11 @@ public class TestSimple {
         CompletableFuture<Void> future = supplier.get();
         Thread.sleep(2000);
         future.exceptionally(throwable -> {
-            System.out.println("外面收到异常：" + throwable);
+            System.out.println("外面收到异常1：" + throwable);
+            return null;
+        });
+        future.exceptionally(throwable -> {
+            System.out.println("外面收到异常2：" + throwable);
             return null;
         });
 

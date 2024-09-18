@@ -1,17 +1,17 @@
 package com.grace.gateway.config.pojo;
 
 import com.grace.gateway.common.enums.CircuitBreakerEnum;
+import com.grace.gateway.common.enums.ResilienceEnum;
 import lombok.Data;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static com.grace.gateway.common.constant.FallbackConstant.DEFAULT_FALLBACK_HANDLER_NAME;
 import static com.grace.gateway.common.constant.GrayConstant.MAX_GRAY_THRESHOLD;
 import static com.grace.gateway.common.constant.GrayConstant.THRESHOLD_GRAY_STRATEGY;
 import static com.grace.gateway.common.constant.LoadBalanceConstant.ROUND_ROBIN_LOAD_BALANCE_STRATEGY;
 import static com.grace.gateway.common.constant.LoadBalanceConstant.VIRTUAL_NODE_NUM;
+import static com.grace.gateway.common.enums.ResilienceEnum.*;
 
 @Data
 public class RouteDefinition {
@@ -43,6 +43,9 @@ public class RouteDefinition {
         private boolean circuitBreakerEnabled = true; // 是否开启熔断
         private boolean fallbackEnabled = true; // 是否开启降级
         private boolean bulkheadEnabled = false; // 是否开启信号量隔离
+        private boolean threadPoolBulkheadEnabled = false; // 是否开启线程池隔离
+
+        private List<ResilienceEnum> order = Arrays.asList(THREADPOOLBULKHEAD, BULKHEAD, RETRY, CIRCUITBREAKER, FALLBACK);
 
         // Retry
         private int maxAttempts = 3; // 重试次数
@@ -67,6 +70,11 @@ public class RouteDefinition {
         private int maxConcurrentCalls = 1000; // 信号数量
         private int maxWaitDuration = 0; // 最大等待时间
         private boolean fairCallHandlingEnabled = false; // 是否公平竞争信号量
+
+        // ThreadPoolBulkhead
+        private int coreThreadPoolSize = 5; // 核心线程数
+        private int maxThreadPoolSize = 10; // 最大线程数
+        private int queueCapacity = 100; // 队列容量
 
     }
 
