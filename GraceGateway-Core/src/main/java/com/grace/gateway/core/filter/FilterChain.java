@@ -23,34 +23,24 @@ public class FilterChain {
         return this;
     }
 
-    public void doPreFilter(GatewayContext ctx) {
-        if (!filters.isEmpty()) {
-            try {
-                for (Filter filter : filters) {
-                    filter.doPreFilter(ctx);
-                }
-            } catch (Exception e) {
-                log.error("执行过滤器发生异常,异常信息：{}", e.getMessage());
-                throw e;
-            }
-        }
-    }
-
-    public void doPostFilter(GatewayContext ctx) {
-        if (!filters.isEmpty()) {
-            try {
-                for (int i = filters.size() - 1; i >= 0; i--) {
-                    filters.get(i).doPostFilter(ctx);
-                }
-            } catch (Exception e) {
-                log.error("执行过滤器发生异常,异常信息：{}", e.getMessage());
-                throw e;
-            }
-        }
-    }
-
     public void sort() {
         filters.sort(Comparator.comparingInt(Filter::getOrder));
+    }
+
+    public int size() {
+        return filters.size();
+    }
+
+    public void doPreFilter(int index, GatewayContext context) {
+        if (index < filters.size() && index >= 0) {
+            filters.get(index).doPreFilter(context);
+        }
+    }
+
+    public void doPostFilter(int index, GatewayContext context) {
+        if (index < filters.size() && index >= 0) {
+            filters.get(index).doPostFilter(context);
+        }
     }
 
 

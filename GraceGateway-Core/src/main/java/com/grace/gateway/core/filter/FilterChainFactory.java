@@ -51,6 +51,8 @@ public class FilterChainFactory {
     }
 
     private static void addPreFilter(FilterChain chain) {
+        addFilterIfPresent(chain, CORS_FILTER_NAME);
+        addFilterIfPresent(chain, FLOW_FILTER_NAME);
         addFilterIfPresent(chain, GRAY_FILTER_NAME);
         addFilterIfPresent(chain, LOAD_BALANCE_FILTER_NAME);
     }

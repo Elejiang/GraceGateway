@@ -33,8 +33,6 @@ public class RouteDefinition {
     // 系统弹性配置，熔断、降级、重试等
     private ResilienceConfig resilience = new ResilienceConfig();
 
-    private FlowConfig flow = new FlowConfig();
-
     // 路由需要走的过滤器
     private Set<FilterConfig> filterConfigs = new HashSet<>();
 
@@ -83,7 +81,64 @@ public class RouteDefinition {
     }
 
     @Data
-    public static class FlowConfig {
+    public static class FilterConfig {
+
+        /**
+         * 过滤器名字，唯一的
+         */
+        private String name;
+
+        /**
+         * 是否启用过滤器
+         */
+        private boolean enable = true;
+
+        /**
+         * 过滤器规则描述，json
+         */
+        private String config;
+
+
+    }
+
+    @Data
+    public static class GrayFilterConfig {
+
+        /**
+         * 灰度策略名，默认根据流量
+         */
+        private String strategyName = THRESHOLD_GRAY_STRATEGY;
+
+        /**
+         * 灰度流量最大比例
+         */
+        private double maxGrayThreshold = MAX_GRAY_THRESHOLD;
+
+
+    }
+
+    @Data
+    public static class LoadBalanceFilterConfig {
+
+        /**
+         * 负载均衡策略名，默认轮询
+         */
+        private String strategyName = ROUND_ROBIN_LOAD_BALANCE_STRATEGY;
+
+        /**
+         * 是否开启严格轮询
+         */
+        private boolean isStrictRoundRobin = true;
+
+        /**
+         * 一致性哈希算法虚拟节点个数
+         */
+        private int virtualNodeNum = VIRTUAL_NODE_NUM;
+
+    }
+
+    @Data
+    public static class FlowFilterConfig {
 
         /**
          * 是否开启流控
@@ -109,60 +164,26 @@ public class RouteDefinition {
         private int rate = 500;
 
     }
-
-    @Data
-    public static class FilterConfig {
-
-        /**
-         * 过滤器名字，唯一的
-         */
-        private String name;
-
-        /**
-         * 是否启用过滤器
-         */
-        private boolean enable = true;
-
-        /**
-         * 过滤器规则描述，json
-         */
-        private String config;
-
-    }
-    @Data
-    public static class GrayFilterConfig {
-
-
-        /**
-         * 灰度策略名，默认根据流量
-         */
-        private String strategyName = THRESHOLD_GRAY_STRATEGY;
-
-        /**
-         * 灰度流量最大比例
-         */
-        private double maxGrayThreshold = MAX_GRAY_THRESHOLD;
-
-    }
-    @Data
-    public static class LoadBalanceFilterConfig {
-
-
-        /**
-         * 负载均衡策略名，默认轮询
-         */
-        private String strategyName = ROUND_ROBIN_LOAD_BALANCE_STRATEGY;
-
-        /**
-         * 是否开启严格轮询
-         */
-        private boolean isStrictRoundRobin = true;
-
-        /**
-         * 一致性哈希算法虚拟节点个数
-         */
-        private int virtualNodeNum = VIRTUAL_NODE_NUM;
-
-    }
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

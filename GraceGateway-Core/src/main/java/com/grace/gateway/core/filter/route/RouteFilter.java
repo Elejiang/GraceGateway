@@ -29,12 +29,11 @@ public class RouteFilter implements Filter {
                 return null;
             });
         }
-
     }
 
     @Override
     public void doPostFilter(GatewayContext context) {
-
+        context.doFilter();
     }
 
     @Override

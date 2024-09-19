@@ -1,3 +1,5 @@
 com.grace.gateway.core.filter.loadbalance.LoadBalanceFilter
 com.grace.gateway.core.filter.gray.GrayFilter
 com.grace.gateway.core.filter.route.RouteFilter
+com.grace.gateway.core.filter.cors.CorsFilter
+com.grace.gateway.core.filter.flow.FlowFilter
