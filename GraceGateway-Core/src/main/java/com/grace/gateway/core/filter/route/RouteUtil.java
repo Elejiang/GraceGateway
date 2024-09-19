@@ -1,7 +1,6 @@
 package com.grace.gateway.core.filter.route;
 
 import com.grace.gateway.core.context.GatewayContext;
-import com.grace.gateway.core.helper.ContextHelper;
 import com.grace.gateway.core.helper.ResponseHelper;
 import com.grace.gateway.core.http.HttpClient;
 import org.asynchttpclient.Request;
@@ -23,8 +22,7 @@ public class RouteUtil {
                     throw new RuntimeException(throwable);
                 }
                 context.setResponse(ResponseHelper.buildGatewayResponse(response));
-                context.getFilterChain().doPostFilter(context); // 过滤器后处理
-                ContextHelper.writeBackResponse(context); // 写回数据
+                context.doFilter();
             }));
             return future;
         };

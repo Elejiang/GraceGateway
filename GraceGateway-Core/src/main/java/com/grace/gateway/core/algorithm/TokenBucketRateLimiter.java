@@ -3,7 +3,7 @@ package com.grace.gateway.core.algorithm;
 import com.grace.gateway.common.enums.ResponseCode;
 import com.grace.gateway.common.exception.LimitedException;
 import com.grace.gateway.core.context.GatewayContext;
-import com.grace.gateway.core.flow.RateLimiter;
+import com.grace.gateway.core.filter.flow.RateLimiter;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -26,7 +26,7 @@ public class TokenBucketRateLimiter implements RateLimiter {
     @Override
     public void tryConsume(GatewayContext context) {
         if (tokens.getAndDecrement() > 0) {
-            context.getFilterChain().doPreFilter(context);
+            context.doFilter();
         } else {
             tokens.incrementAndGet();
             throw new LimitedException(ResponseCode.TOO_MANY_REQUESTS);

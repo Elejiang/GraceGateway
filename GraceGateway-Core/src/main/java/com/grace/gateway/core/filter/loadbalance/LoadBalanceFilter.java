@@ -48,11 +48,12 @@ public class LoadBalanceFilter implements Filter {
             throw new NotFoundException(ResponseCode.SERVICE_INSTANCE_NOT_FOUND);
         }
         context.getRequest().setModifyHost(serviceInstance.getIp() + ":" + serviceInstance.getPort());
+        context.doFilter();
     }
 
     @Override
     public void doPostFilter(GatewayContext context) {
-
+        context.doFilter();
     }
 
     @Override

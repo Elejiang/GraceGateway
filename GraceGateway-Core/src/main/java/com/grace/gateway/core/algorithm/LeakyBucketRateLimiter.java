@@ -3,7 +3,7 @@ package com.grace.gateway.core.algorithm;
 import com.grace.gateway.common.enums.ResponseCode;
 import com.grace.gateway.common.exception.LimitedException;
 import com.grace.gateway.core.context.GatewayContext;
-import com.grace.gateway.core.flow.RateLimiter;
+import com.grace.gateway.core.filter.flow.RateLimiter;
 import io.netty.channel.EventLoopGroup;
 
 import java.util.Queue;
@@ -36,7 +36,7 @@ public class LeakyBucketRateLimiter implements RateLimiter {
                     // 重新提交请求到 Netty 事件循环
                     gatewayContext.getNettyCtx().executor().execute(() -> {
                         currentWaterLevel.decrementAndGet();
-                        gatewayContext.getFilterChain().doPreFilter(gatewayContext);
+                        gatewayContext.doFilter();
                     });
                 }
             }

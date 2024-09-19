@@ -41,11 +41,12 @@ public class GrayFilter implements Filter {
             // 灰度实例都没，不走灰度
             context.getRequest().setGray(false);
         }
+        context.doFilter();
     }
 
     @Override
     public void doPostFilter(GatewayContext context) {
-
+        context.doFilter();
     }
 
     @Override

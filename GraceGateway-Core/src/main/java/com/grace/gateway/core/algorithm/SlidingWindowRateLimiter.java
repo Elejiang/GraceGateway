@@ -3,7 +3,7 @@ package com.grace.gateway.core.algorithm;
 import com.grace.gateway.common.enums.ResponseCode;
 import com.grace.gateway.common.exception.LimitedException;
 import com.grace.gateway.core.context.GatewayContext;
-import com.grace.gateway.core.flow.RateLimiter;
+import com.grace.gateway.core.filter.flow.RateLimiter;
 
 import java.time.Instant;
 import java.util.Deque;
@@ -27,7 +27,7 @@ public class SlidingWindowRateLimiter implements RateLimiter {
         cleanOldRequests(now);
         if (requestTimestamps.size() < capacity) {
             requestTimestamps.addLast(now);
-            context.getFilterChain().doPreFilter(context);
+            context.doFilter();
         } else {
             throw new LimitedException(ResponseCode.TOO_MANY_REQUESTS);
         }
