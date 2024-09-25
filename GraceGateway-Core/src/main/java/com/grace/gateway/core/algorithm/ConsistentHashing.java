@@ -22,7 +22,7 @@ public class ConsistentHashing {
     public void addNode(String node) {
         for (int i = 0; i < virtualNodeNum; i++) {
             String virtualNode = node + "&&VN" + i;
-            hashCircle.put(getHash(virtualNode), virtualNode);
+            hashCircle.put(getHash(virtualNode), node);
         }
     }
 

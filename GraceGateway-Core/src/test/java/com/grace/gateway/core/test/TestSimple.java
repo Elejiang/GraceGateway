@@ -1,9 +1,12 @@
 package com.grace.gateway.core.test;
 
+import com.grace.gateway.core.algorithm.ConsistentHashing;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -92,6 +95,16 @@ public class TestSimple {
         System.out.println(map.get("aaa"));
         map.computeIfAbsent("aaa", name -> "vvv");
         System.out.println(map.get("aaa"));
+    }
+
+    @Test
+    public void testHash() {
+        List<String> nodes = Arrays.asList("user1", "user2");
+        ConsistentHashing consistentHashing = new ConsistentHashing(nodes, 20);
+        System.out.println(consistentHashing.getNode("aad12wa"));
+        System.out.println(consistentHashing.getNode("dd5l4k5d"));
+        System.out.println(consistentHashing.getNode("cck45hj"));
+        System.out.println(consistentHashing.getNode("cc4dw4a35dc"));
     }
 
 }
