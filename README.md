@@ -11,8 +11,9 @@
 > - 基于 SPI 允许用户自定义扩展网关功能，如自定义过滤器、限流策略、灰度策略、负载均衡策略、降级策略等。
 
 ## 启动项目
-1. 进入到项目根目录(GraceGateway)：`mvn clean install -DskipTests`
-2. 项目默认使用nacos作为注册中心和配置中心，需要先启动nacos服务
+1. 环境变量里的JDK需要是JDK17，`java -version`查看当前环境变量的JDK版本
+2. 进入到项目根目录(GraceGateway)：`mvn clean install -DskipTests`
+3. 项目默认使用nacos作为注册中心和配置中心，需要先启动nacos服务(推荐版本2.2.1，不然可能出现兼容问题)
    > nacos中创建配置，Data ID：grace-gateway-data（和gateway.yaml里的配置一致）   
    > 格式如下：   
    > ```
@@ -27,12 +28,12 @@
    > }
    > ```
    > 更多配置可以看`com.grace.gateway.config.pojo.RouteDefinition`
-3. 启动一个或多个下游服务，例如GraceGateway-User，如有需要，可以更改application.yml中的配置
+4. 启动一个或多个下游服务，例如GraceGateway-User，如有需要，可以更改application.yml中的配置
    ```
    cd GraceGateway-User
    mvn clean package spring-boot:run
    ```
-4. 启动网关，如GraceGateway-Demo，如有需要，可以更改gateway.yaml中的配置
+5. 启动网关，如GraceGateway-Demo，如有需要，可以更改gateway.yaml中的配置
    ```
    cd GraceGateway-Demo
    mvn clean compile exec:java -Dexec.mainClass="com.grace.gateway.demo.Main"
